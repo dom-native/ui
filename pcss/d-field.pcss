@@ -1,0 +1,173 @@
+.d-field{
+	input, textarea{
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+/* NOTE: for now supports only ico-lead or ico-trail, ico-trail or text-trail */
+.d-field{
+	background: var(--bkg);
+	position: relative;
+	min-height: 3.25rem;
+	display: grid;
+	grid-template-rows: .5rem 1fr;
+	grid-template-columns: var(--d-field-v-padding) 1fr  var(--d-field-v-padding) ;
+	align-items: stretch; 
+
+	&[ico-lead]{
+		grid-template-columns: 2.5rem 1fr  var(--d-field-v-padding);
+	}
+
+	&[ico-trail]{
+		grid-template-columns:  var(--d-field-v-padding) 1fr 2.5rem;
+	}
+
+	&[text-trail]{
+		grid-template-columns:  var(--d-field-v-padding) 1fr auto;
+	}
+
+
+	&[disabled]{
+		opacity: .5;
+	}
+
+	&[readonly]{
+		border-bottom: solid 1px var(--bdr-lighter);
+	}	
+
+
+	&.focused{
+		& > d-ico{
+			fill: var(--d-field-bdr-focused);
+		}
+		
+		& > label {
+			grid-row: 1;
+			color: var(--d-field-label-focused);
+		}
+		.box{
+			border: solid 1px var(--d-field-bdr-focused);
+		}
+	}
+
+
+	& > label {
+		@mixin typo-label{};
+		background: white;
+		color: var(--d-field-label);
+		/* transform: translate(1rem,.25rem); */
+		position: absolute;
+		left: .5rem;
+		padding: 0 .5rem;
+		z-index: 12; /* need to fix that */
+		display: inline-flex;		
+	}
+
+	& > .label-trail{
+		position: relative;
+		grid-row: 1;
+		grid-column: 2;
+		height: .75rem;
+		justify-self: end;
+	}
+
+	& > .text-trail{
+		@mixin typo-input{};		
+		grid-row: 2;
+		grid-column: 3;
+		background: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0 .5rem;
+		color: var(--d-field-trail-text);
+	}
+
+	/* label repositioning when no-value */
+	&.no-value:not([placeholder]):not(.focused){
+			& > label{
+				@mixin typo-input{};
+				color: var(--d-field-label-no-value);
+				background: none;
+				grid-row: 2;
+				grid-column: 2;
+				position: relative;
+				left: 0;
+				padding: 0;
+				display: block;
+				display: flex;
+				align-items: center;
+			}
+	}	
+
+	&[placeholder].no-value{
+		color: var(--d-field-label-no-value);
+	}
+	
+	&.no-value[ico-lead]:not([placeholder]):not(.focused){
+		& > label{
+			/* padding-left: 2.5rem; */
+		}
+	}
+
+	& > .box {
+		grid-row: 2;
+		grid-column: 1 / span 4;
+		border: solid 1px var(--d-field-bdr);
+		border-radius: 3px;
+		z-index: 0;
+	}
+
+	& > .ipt {
+		grid-row: 2;
+		grid-column: 2;		
+		@mixin typo-input{};
+		box-shadow: none;
+		background: none;
+		outline: none;
+		border: none;
+		z-index: 2;		
+	}
+	
+	&[ico-lead] > .ipt{
+		/* padding-left: 2.5rem; */
+	}
+
+	&[ico-trail] > .ipt{
+		/* padding-right: 2.5rem; */
+	}
+
+	& > d-ico {
+		grid-row: 2 ;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: auto;
+		height: auto;
+		max-width: none;
+		max-height: none;
+		z-index: 2;
+		svg.symbol{
+			width: 1.5rem;
+			height: 1.5rem;
+		}	
+
+		&.trail{
+			grid-column: 3;
+		}	
+
+		&.lead{
+			grid-column: 1;
+		}	
+		
+	}
+
+	&.no-label{
+		grid-template-rows: 0 1fr;
+		min-height: 2.75rem;
+	}
+
+}

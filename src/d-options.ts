@@ -1,0 +1,94 @@
+import { all, attr, customElement, first, on } from 'dom-native';
+import { BaseFieldElement } from './d-base-field';
+
+/**
+ * COMPONENT NOT SUPPORTED YET. Just placeholder code. 
+ * 
+ * m-options custom element encapsulate a label/input field group ()`c-input > label, input`) structure.
+ * component styles are global but scoped via css naming (see c-input.pcss).
+ *
+ * Usage: `<m-options name="state" options="1:Open, 0:Close, 2 : Both" value="0"></m-options>`
+ * See:  http://localhost:8080/_spec/controls
+ * 
+ * Attributes:
+ *   - See BaseFieldElement.
+ *   - `value?`: See BaseFieldElement. String matching the "value" part of value. TODO: need to make reflective.
+ *   - `options`: possible options with format [value: label, value: label] (0: cat, 1: dog). 
+ *             'value' act as a key, can be be any string (value and label will be trimmed)
+ *             e.g., options='0: cat, 1: dog, 2: lion'
+ * 
+ * Properties:
+ *   - See BaseFieldElement.
+ *   - `value`: Return the current value selected ('0' or '1' or '2' from the above example)
+ * 
+ * CSS:
+ *   - See BaseFieldElement.
+ * 
+ * Content:
+ *   - TBD
+ * 
+ * Events:
+ *   - `CHANGE` see BaseFieldElement.
+ */
+
+@customElement('m-options')
+export class OptionsElement extends BaseFieldElement {
+
+	//// Poperty (Value)
+	get value(): string | null {
+		const selEl = first('m-options > div.sel');
+		return (selEl) ? selEl.getAttribute('data-val') : null;
+	}
+
+	set value(val: string | null) {
+		// stringify
+		val = (typeof val !== 'string' && val != null) ? '' + val : val;
+		const old = this.value;
+
+		const items = all(this, 'm-options > div');
+
+		for (const item of items) {
+
+			if (item.getAttribute('data-val') === val) {
+				item.classList.add('sel');
+			} else {
+				item.classList.remove('sel');
+			}
+		}
+
+		if (val !== old) {
+			this.triggerChange();
+		}
+	}
+
+	//#region    ---------- Lifecycle ---------- 
+	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
+	init() {
+		super.init();
+
+		const [options, value] = attr(this, ['options', 'value']);
+
+		//// Build the component HTML
+		let html = '';
+		if (options) {
+			for (const line of options.split(',')) {
+				let [val, label] = line.split(':');
+				val = val.trim();
+				label = label.trim();
+				const sel = (value == val) ? 'sel' : '';
+				html += `  <div class="${sel}" data-val="${val}">${label}</div>\n`;
+			}
+			this.innerHTML = html;
+		}
+
+		//// Bind the internal component events
+		on(this, 'click', 'm-options > div', (evt) => {
+			const clickedItem = evt.selectTarget;
+			const val = clickedItem.getAttribute('data-val');
+			this.value = val;
+			this.triggerChange();
+		});
+	}
+	//#endregion ---------- /Lifecycle ---------- 
+
+}

@@ -1,0 +1,75 @@
+d-select.d-field{
+	cursor: pointer;
+	grid-template-columns: var(--d-field-v-padding) 1fr 2rem;
+
+	&[ico-lead]{
+		grid-template-columns: 2.5rem 1fr 2rem;
+	}
+
+	& > div.ipt{
+		display: flex;
+		align-items: center;
+	}
+
+	&[readonly]{
+		/* Note: on Chrome, if visibility hidden on c-ico, we get unwanted horizontal scroll bar */
+		d-ico svg{
+			visibility: hidden;
+		}
+	}
+
+	& > d-ico.chevron{
+		z-index: 2;		
+		grid-column: 3;
+		svg.symbol{
+			width: 1rem;
+			height: 1rem;
+		}			
+	}
+
+}
+
+d-select-popup{
+	position: absolute;
+	@mixin elev-6{};
+	width: 8rem;
+	/* height: 10rem; */
+	background: #FFF;
+	max-height: 15rem;
+	overflow: auto;
+	z-index: 100;
+	
+	li.none{
+		color: red;
+	}
+	ul, li{
+		margin: 0;
+		padding: 0;
+		color: var(--txt);
+	}
+
+	ul{
+		& > li, & > a{
+			cursor: pointer;
+			line-height: 1;
+			padding: 1rem 1rem;
+
+			&.sel{
+				font-weight: 600;
+			}
+			&:hover{
+				background: var(--d-select-option-ov-bkg);
+			}
+
+			&:not([data-val]){
+				font-weight: 400;
+				color: var(--d-select-option-noval-clr);
+			}
+		}
+
+		& > li{
+			list-style: none;
+		}
+	}
+
+}

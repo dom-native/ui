@@ -1,0 +1,21 @@
+d-check.d-field, .d-check{
+	.ipt{
+		height: 1rem;
+		width: 1rem;
+		border: solid 2px var(--d-field-choice-bdr);
+		svg.symbol{
+			display: none;
+		}
+	}
+	&[checked]{
+		.ipt{
+			border: solid 2px var(--d-field-choice-bdr-on);
+			background: var(--d-field-choice-bdr-on);
+			svg.symbol{
+				display: block;
+				fill: var(--d-field-choice-ico);
+			}			
+		}
+	}
+
+}

@@ -1,0 +1,57 @@
+{
+  "name": "@dom-native/ui",
+  "version": "0.1.0",
+  "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dom-native/ui.git"
+  },
+  "keywords": [
+    "web-component",
+    "native",
+    "ui components",
+    "html5",
+    "DOM",
+    "DOM Centric",
+    "Patterns",
+    "html",
+    "framework",
+    "web-framework",
+    "drag and drop"
+  ],
+  "dependencies": {
+    "tslib": "^1.13.0"
+  },
+  "devDependencies": {
+    "cmdrouter": "^0.3.1",
+    "dom-native": "^0.9.9",
+    "handlebars": "^4.7.6",
+    "sketchdev": "^0.4.2",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2",
+    "vdev": "^0.11.14"
+  },
+  "peerDependencies": {
+    "dom-native": "^0.9.9"
+  },
+  "files": [
+    "src/",
+    "dist/",
+    "pcss/"
+  ],
+  "scripts": {
+    "prepack": "npm run build",
+    "code": "npm run watch & npm run start",
+    "start": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project demo/server/tsconfig.json   demo/server/src/start.ts",
+    "ico": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts ico",
+    "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build",
+    "watch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts watch",
+    "pub": "./node_modules/.bin/vdev sup demo/ site:dom-native/ui-demo/"
+  },
+  "engines": {
+    "node": ">=8.2.0"
+  },
+  "author": "Jeremy Chone <jeremy.chone@gmail.com> (http://jeremychone.com)",
+  "license": "MIT"
+}
