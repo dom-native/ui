@@ -9,7 +9,7 @@ export class SpecMSelectView extends SpecView {
 	name = 'spec-d-select'
 	doc = SPEC_DOC
 
-	@onEvent('M-DATA', 'd-select.load-example')
+	@onEvent('D-DATA', 'd-select.load-example')
 	async onSelectData(evt: OnEvent<SelectDataSender>) {
 		await wait(2000);
 		evt.detail(OPTIONS_LOADED);

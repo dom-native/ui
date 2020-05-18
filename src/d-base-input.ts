@@ -57,7 +57,7 @@ export abstract class BaseInputElement extends BaseFieldElement {
 
 		// add the input
 		this.inputEl = this.createIptEl();
-		this.inputEl.classList.add('ipt');
+		this.inputEl.classList.add('d-ipt');
 		content.appendChild(this.inputEl);
 
 		const [label, labelTrail, textTrail] = attr(this, ['label', 'label-trail', 'text-trail']);
@@ -105,7 +105,7 @@ export abstract class BaseInputElement extends BaseFieldElement {
 		this.noValue = (!value);
 
 		//// Bind internal component events
-		on(this, 'focusin, focusout, change', '.ipt', (evt) => {
+		on(this, 'focusin, focusout, change', '.d-ipt', (evt) => {
 			const m_input = this;
 
 			switch (evt.type) {

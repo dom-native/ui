@@ -5,15 +5,15 @@ import { spawn } from 'p-spawn';
 import { sketchdev } from 'sketchdev';
 
 
-const SKETCH_PATH = '.design/dom-base-ui-assets.sketch';
+const SKETCH_PATH = '.design/ui-assets.sketch';
 const SYMBOLS_TS_PATH = 'src/icons-default.ts'
 
-router({ build, watch, dev, ico, push }).route();
+router({ build, watch, dev, sketch, push }).route();
 
 async function build() {
 	await fs.saferRemove('./dist');
 
-	await ico();
+	await sketch();
 
 	// build the mvdom-ui.css
 	await spawn('./node_modules/.bin/vdev', ['build', 'dist']);
@@ -29,7 +29,7 @@ async function watch() {
 
 	if (await fs.pathExists(SKETCH_PATH)) {
 		chokidar.watch(SKETCH_PATH).on('change', async () => {
-			await ico();
+			await sketch();
 		});
 	}
 }
@@ -39,7 +39,7 @@ async function dev() {
 	spawn('npm', ['run', 'start']);
 }
 
-async function ico() {
+async function sketch() {
 	const outDir = '.design/out';
 	await fs.saferRemove(outDir);
 	await fs.mkdir(outDir);
@@ -47,7 +47,7 @@ async function ico() {
 	const sketchDoc = await sketchdev(SKETCH_PATH);
 	const svgDir = outDir + '/svgs';
 	const spritePath = outDir + '/sprite.svg';
-	await sketchDoc.export({
+	await sketchDoc.exportArtboards({
 		out: svgDir,
 		replace: [/\/\d.*$/, ''] as [RegExp, string],
 		artboardName: /^d-ico\/.*$/, // the regex matching artboard that should be exported

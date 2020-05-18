@@ -1,21 +1,28 @@
-m-options{
+d-options.d-field{
 	display: grid;
-	grid-auto-flow: column;
-	grid-auto-columns: max-content;
 	min-height: auto;
 	align-items: center;
 
-	& > div {
-		@mixin typo-body1{};
-		height: 1rem;
-		cursor: pointer;
-		color: var(--txt-L3);
-		padding: 0 1rem;
-		border-right: solid 1px var(--bdr-L4);
-
-		&.sel{
-			color: var(--txt-prime);
-			font-weight: 700;
+	& > .d-ipt {
+		display: grid;
+		grid-auto-flow: column;
+		grid-column-gap: .5rem;
+		justify-items: center;
+		& > div {
+			@mixin typo-body1{};
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 2rem;
+			cursor: pointer;
+			color: var(--txt-L3);
+			padding: 0 1rem;
+			border-right: solid 1px var(--bdr-L4);
+			
+			&.sel{
+				color: var(--txt-prime);
+				font-weight: 700;
+			}
 		}
 	}
 
@@ -26,6 +33,5 @@ m-options{
 	& > div:last-of-type{
 		border-right: none;
 	}
-
 
 }

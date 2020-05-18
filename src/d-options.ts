@@ -4,10 +4,10 @@ import { BaseFieldElement } from './d-base-field';
 /**
  * COMPONENT NOT SUPPORTED YET. Just placeholder code. 
  * 
- * m-options custom element encapsulate a label/input field group ()`c-input > label, input`) structure.
+ * d-options custom element encapsulate a label/input field group ()`c-input > label, input`) structure.
  * component styles are global but scoped via css naming (see c-input.pcss).
  *
- * Usage: `<m-options name="state" options="1:Open, 0:Close, 2 : Both" value="0"></m-options>`
+ * Usage: `<d-options name="state" options="1:Open, 0:Close, 2 : Both" value="0"></d-options>`
  * See:  http://localhost:8080/_spec/controls
  * 
  * Attributes:
@@ -31,12 +31,12 @@ import { BaseFieldElement } from './d-base-field';
  *   - `CHANGE` see BaseFieldElement.
  */
 
-@customElement('m-options')
+@customElement('d-options')
 export class OptionsElement extends BaseFieldElement {
 
 	//// Poperty (Value)
 	get value(): string | null {
-		const selEl = first('m-options > div.sel');
+		const selEl = first('.d-ipt > div.sel');
 		return (selEl) ? selEl.getAttribute('data-val') : null;
 	}
 
@@ -45,7 +45,7 @@ export class OptionsElement extends BaseFieldElement {
 		val = (typeof val !== 'string' && val != null) ? '' + val : val;
 		const old = this.value;
 
-		const items = all(this, 'm-options > div');
+		const items = all(this, '.d-ipt > div');
 
 		for (const item of items) {
 
@@ -69,7 +69,7 @@ export class OptionsElement extends BaseFieldElement {
 		const [options, value] = attr(this, ['options', 'value']);
 
 		//// Build the component HTML
-		let html = '';
+		let html = '<div class="d-ipt">';
 		if (options) {
 			for (const line of options.split(',')) {
 				let [val, label] = line.split(':');
@@ -78,11 +78,12 @@ export class OptionsElement extends BaseFieldElement {
 				const sel = (value == val) ? 'sel' : '';
 				html += `  <div class="${sel}" data-val="${val}">${label}</div>\n`;
 			}
+			html += '</div>';
 			this.innerHTML = html;
 		}
 
 		//// Bind the internal component events
-		on(this, 'click', 'm-options > div', (evt) => {
+		on(this, 'click', '.d-ipt > div', (evt) => {
 			const clickedItem = evt.selectTarget;
 			const val = clickedItem.getAttribute('data-val');
 			this.value = val;

@@ -1,7 +1,7 @@
 import { all, append, BaseHTMLElement, customElement, elem, first, onWin } from 'dom-native';
 
-
-const components = ['d-input', 'd-check', 'd-radio', 'd-select', 'd-text', 'd-ico-symbol'];
+// 'd-options' (not officially supported)
+const components = ['d-input', 'd-check', 'd-radio', 'd-options', 'd-select', 'd-text', 'd-ico-symbol'];
 
 @customElement('spec-main-view')
 class SpecMainView extends BaseHTMLElement {

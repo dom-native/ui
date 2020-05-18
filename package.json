@@ -21,13 +21,13 @@
     "drag and drop"
   ],
   "dependencies": {
-    "tslib": "^1.13.0"
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "cmdrouter": "^0.3.1",
     "dom-native": "^0.9.9",
     "handlebars": "^4.7.6",
-    "sketchdev": "^0.4.2",
+    "sketchdev": "^0.5.0",
     "ts-node": "^8.10.1",
     "typescript": "^3.9.2",
     "vdev": "^0.11.14"
@@ -44,7 +44,7 @@
     "prepack": "npm run build",
     "code": "npm run watch & npm run start",
     "start": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project demo/server/tsconfig.json   demo/server/src/start.ts",
-    "ico": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts ico",
+    "sketch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts sketch",
     "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build",
     "watch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts watch",
     "pub": "./node_modules/.bin/vdev sup demo/ site:dom-native/ui-demo/"

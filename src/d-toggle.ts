@@ -2,7 +2,7 @@ import { attr, elem, on } from 'dom-native';
 import { BaseFieldElement } from './d-base-field';
 
 /**
- * Base component for toggle like components 'd-check', 'd-radio', and future 'm-switch'
+ * Base component for toggle like components 'd-check', 'd-radio'
  *
  * Attributes:
  *   - See BaseFieldElement.
@@ -87,10 +87,10 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 			content.appendChild(this.labelEl);
 		}
 
-		// create the .ipt element
-		// Note: here we render the iptContent before setting the this.iptEl allowing the renderIptContent to know if it is initial or post rendering
+		// create the .d-ipt element
+		// Note: here we render the iptContent before setting the this.d-iptEl allowing the renderIptContent to know if it is initial or post rendering
 		const iptContent = this.renderIptContent()!;
-		this.iptEl = attr(elem('div'), { class: 'ipt' });
+		this.iptEl = attr(elem('div'), { class: 'd-ipt' });
 		this.iptEl.innerHTML = iptContent;
 		content.append(this.iptEl);
 
@@ -107,7 +107,7 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 		});
 	}
 
-	/** Return the innerHTML content for the .iptEl. If undefined, .iptEl innerHTML won't be updated (allows uncessary updates) */
+	/** Return the innerHTML content for the .d-iptEl. If undefined, .d-iptEl innerHTML won't be updated (allows uncessary updates) */
 	abstract renderIptContent(): string | undefined;
 
 	abstract handleClick(): void;
