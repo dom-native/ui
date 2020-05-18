@@ -1,6 +1,6 @@
 {
   "name": "@dom-native/ui",
-  "version": "0.1.1-SNAPSHOT",
+  "version": "0.1.1",
   "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
   "main": "dist/index.js",
   "repository": {
