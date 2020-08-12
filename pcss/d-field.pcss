@@ -9,7 +9,7 @@
 
 /* NOTE: for now supports only ico-lead or ico-trail, ico-trail or text-trail */
 .d-field{
-	background: var(--bkg);
+	background: var(--d-field-bkg);
 	position: relative;
 	min-height: 3.25rem;
 	display: grid;
@@ -104,7 +104,11 @@
 	}	
 
 	&[placeholder].no-value{
-		color: var(--d-field-label-no-value);
+		/* color: var(--d-field-label-no-value); */
+		color: red;
+		.d-ipt{
+			color: var(--d-field-input);
+		}
 	}
 	
 	&.no-value[ico-lead]:not([placeholder]):not(.focused){
@@ -125,6 +129,7 @@
 		grid-row: 2;
 		grid-column: 2;		
 		@mixin typo-input{};
+		color: var(--d-field-input);
 		box-shadow: none;
 		background: none;
 		outline: none;
