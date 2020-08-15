@@ -46,7 +46,7 @@
     "sketch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts sketch",
     "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build",
     "watch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts watch",
-    "pub": "./node_modules/.bin/vdev sup demo/ site:dom-native/ui-demo/"
+    "pub": "./node_modules/.bin/vdev sup demo/ jc-sites:dom-native/demo/ui/"
   },
   "engines": {
     "node": ">=8.2.0"
