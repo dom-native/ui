@@ -12,14 +12,11 @@ blocks:
     dir: demo/
     baseDistDir: demo/dist/
     webBundles:
-      - name: tmpl
-        entries: ./src/**/*.tmpl
-        dist: ./templates.js
       - name: ts
         entries: ./src/*.ts
         dist: ./demo-bundle.js
       - name: css-demo
-        entries: ./pcss/demo.pcss
+        entries: ./pcss/main.pcss
         dist: ./css/demo.css
       - name: css-ui
         entries: ../pcss/all.pcss

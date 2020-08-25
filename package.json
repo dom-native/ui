@@ -1,6 +1,6 @@
 {
   "name": "@dom-native/ui",
-  "version": "0.1.2",
+  "version": "0.1.3-SNAPSHOT",
   "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
   "main": "dist/index.js",
   "repository": {
@@ -24,12 +24,13 @@
     "tslib": "^2.0.1"
   },
   "devDependencies": {
+    "@dom-native/demo-infra": "0.0.0-internal-1",
     "cmdrouter": "^0.3.1",
     "dom-native": "^0.9.9",
     "handlebars": "^4.7.6",
     "sketchdev": "^0.5.2",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2",
     "vdev": "^0.12.1"
   },
   "peerDependencies": {
@@ -46,7 +47,7 @@
     "sketch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts sketch",
     "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build",
     "watch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts watch",
-    "pub": "./node_modules/.bin/vdev sup demo/ jc-sites:dom-native/demo/ui/"
+    "site": "./node_modules/.bin/vdev sup demo/ jc-sites:dom-native/demo/ui/"
   },
   "engines": {
     "node": ">=8.2.0"

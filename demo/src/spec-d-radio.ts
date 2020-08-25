@@ -1,5 +1,5 @@
+import { CodeDoc, simplePull, SpecView } from '@dom-native/demo-infra';
 import { customElement } from 'dom-native';
-import { CodeDoc, simplePull, SpecView } from 'spec-views';
 
 
 @customElement('spec-d-radio')
@@ -19,18 +19,18 @@ const SPEC_DOC: CodeDoc = {
 			items: [
 				{
 					title: 'd-radio checked',
-					code: `<d-radio name="nameA" label="Val 1" value="val-1"></d-radio>\n<d-radio name="nameA" label="Val 2" value="val-2" checked></d-radio>`,
-					fn: simplePull
+					html: `<d-radio name="nameA" label="Val 1" value="val-1"></d-radio>\n<d-radio name="nameA" label="Val 2" value="val-2" checked></d-radio>`,
+					js: simplePull
 				},
 				{
 					title: 'd-radio none checked',
-					code: `<d-radio name="nameA" label="Val 1" value="val-1"></d-radio>\n<d-radio name="nameA" label="Val 2" value="val-2"></d-radio>`,
-					fn: simplePull
+					html: `<d-radio name="nameA" label="Val 1" value="val-1"></d-radio>\n<d-radio name="nameA" label="Val 2" value="val-2"></d-radio>`,
+					js: simplePull
 				},
 				{
 					title: 'd-radio with value',
-					code: `<d-radio name="mood" label="Label" \n\tvalue="happy">\n</d-radio>`,
-					fn: simplePull
+					html: `<d-radio name="mood" label="Label" \n\tvalue="happy">\n</d-radio>`,
+					js: simplePull
 				}
 			]
 		},
@@ -38,11 +38,11 @@ const SPEC_DOC: CodeDoc = {
 			items: [
 				{
 					title: 'd-radio disabled',
-					code: `<d-radio name="nameA" label="Val 1" label="Label" checked disabled></d-radio>\n<d-radio name="nameA" label="Val 2" label="Label" disabled></d-radio>`
+					html: `<d-radio name="nameA" label="Val 1" label="Label" checked disabled></d-radio>\n<d-radio name="nameA" label="Val 2" label="Label" disabled></d-radio>`
 				},
 				{
 					title: 'd-radio readonly',
-					code: `<d-radio name="nameA" label="Val 1" label="Label" checked readonly></d-radio>\n<d-radio name="nameA" label="Val 2" label="Label" readonly></d-radio>`
+					html: `<d-radio name="nameA" label="Val 1" label="Label" checked readonly></d-radio>\n<d-radio name="nameA" label="Val 2" label="Label" readonly></d-radio>`
 				}
 			]
 		}

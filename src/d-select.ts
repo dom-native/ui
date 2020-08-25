@@ -72,6 +72,7 @@ export class SelectElement extends BaseFieldElement {
 	init() {
 		super.init();
 
+
 		const [label, value] = attr(this, ['label', 'value']);
 
 		//// create the appropriate this.options list from content HTML
@@ -119,6 +120,7 @@ export class SelectElement extends BaseFieldElement {
 
 		//// Bind internal component events
 		on(this, 'click', (evt) => {
+
 			if (!this.popupShowing && !this.disabled && !this.readonly) {
 				const popupCss = this.popupCss;
 				const cssAttr = (popupCss) ? ` class="${popupCss}" ` : '';
@@ -138,6 +140,7 @@ export class SelectElement extends BaseFieldElement {
 				on(popup, 'SELECT, CANCELED', (evt) => {
 					if (evt.type === 'SELECT') {
 						this.value = evt.detail.value;
+
 						this.triggerChange();
 						this.refresh();
 					} else {
@@ -148,6 +151,7 @@ export class SelectElement extends BaseFieldElement {
 				});
 
 				// trigger a data event if a listener wants to provide data
+
 				this.triggerData((options: SelectOption[]) => {
 					this.options = options; // TODO: probably needs to have popup just asking select for options[]
 					popup.options = options;

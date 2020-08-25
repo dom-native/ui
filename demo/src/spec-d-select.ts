@@ -1,6 +1,6 @@
+import { CodeDoc, SpecView } from '@dom-native/demo-infra';
 import { customElement, onEvent, OnEvent } from 'dom-native';
-import { CodeDoc, SpecView } from 'spec-views';
-import { wait } from 'utils';
+import { wait } from 'utils-min';
 import { SelectDataSender, SelectOption } from '../../src/index';
 
 
@@ -9,7 +9,8 @@ export class SpecMSelectView extends SpecView {
 	name = 'spec-d-select'
 	doc = SPEC_DOC
 
-	@onEvent('D-DATA', 'd-select.load-example')
+
+	@onEvent('D-DATA')
 	async onSelectData(evt: OnEvent<SelectDataSender>) {
 		await wait(2000);
 		evt.detail(OPTIONS_LOADED);
@@ -31,23 +32,23 @@ const SPEC_DOC: CodeDoc = {
 			items: [
 				{
 					title: 'd-select standard (label, value)',
-					code: `<d-select label="Label" value="one">${OPTIONS_DEFAULT}</d-select>`
+					html: `<d-select label="Label" value="one">${OPTIONS_DEFAULT}</d-select>`
 				},
 				{
 					title: 'd-select empty (no placeholder)',
-					code: `<d-select label="Label">${OPTIONS_DEFAULT}</d-select>`
+					html: `<d-select label="Label">${OPTIONS_DEFAULT}</d-select>`
 				},
 				{
 					title: 'd-select load data',
-					code: `<d-select class="load-example" label="Label" value="one">Some stuff</d-select>`
+					html: `<d-select class="load-example" label="Label" value="one">Some stuff</d-select>`
 				},
 				{
 					title: 'd-select leading ico',
-					code: `<d-select ico-lead='d-ico-star' label="Label" value="one">${OPTIONS_DEFAULT}</d-select>`
+					html: `<d-select ico-lead='d-ico-star' label="Label" value="one">${OPTIONS_DEFAULT}</d-select>`
 				},
 				{
 					title: 'd-select placeholder',
-					code: `<d-select label="Label" placeholder="Placeholder">${OPTIONS_DEFAULT}</d-select>`
+					html: `<d-select label="Label" placeholder="Placeholder">${OPTIONS_DEFAULT}</d-select>`
 				}
 			]
 		},
@@ -55,19 +56,19 @@ const SPEC_DOC: CodeDoc = {
 			items: [
 				{
 					title: 'd-select disabled',
-					code: `<d-select label="Label" value="Value" disabled>${OPTIONS_DEFAULT}</d-select>	`
+					html: `<d-select label="Label" value="Value" disabled>${OPTIONS_DEFAULT}</d-select>	`
 				},
 				{
 					title: 'd-select empty and disabled',
-					code: `<d-select label="Label" disabled>${OPTIONS_DEFAULT}</d-select>`
+					html: `<d-select label="Label" disabled>${OPTIONS_DEFAULT}</d-select>`
 				},
 				{
 					title: 'd-select no label',
-					code: `<d-select value="value">${OPTIONS_DEFAULT}</d-select>`
+					html: `<d-select value="value">${OPTIONS_DEFAULT}</d-select>`
 				},
 				{
 					title: 'd-select placeholder no label',
-					code: `<d-select placeholder="Placeholder">${OPTIONS_DEFAULT}</d-select>`
+					html: `<d-select placeholder="Placeholder">${OPTIONS_DEFAULT}</d-select>`
 				}
 			]
 		}

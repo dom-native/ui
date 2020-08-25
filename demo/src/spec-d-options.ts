@@ -1,5 +1,5 @@
+import { CodeDoc, SpecView } from '@dom-native/demo-infra';
 import { customElement } from 'dom-native';
-import { CodeDoc, SpecView } from 'spec-views';
 
 
 @customElement('spec-d-options')
@@ -22,7 +22,9 @@ const SPEC_DOC: CodeDoc = {
 			items: [
 				{
 					title: 'd-options standard',
-					code: `<d-options name="state"\n  options="1:Open, 0:Close, 2: Both" value="0">\n</d-options>`
+					html: `
+<d-options name="state"
+           options="1:Open, 0:Close, 2: Both" value="0" style="width: 10rem">\n</d-options>`
 				}
 			]
 		}

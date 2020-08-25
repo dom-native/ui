@@ -1,5 +1,5 @@
+import { CodeDoc, SpecView } from '@dom-native/demo-infra';
 import { customElement } from 'dom-native';
-import { CodeDoc, SpecView } from 'spec-views';
 
 
 @customElement('spec-d-ico-symbol')
@@ -16,11 +16,11 @@ const spec_input_doc: CodeDoc = {
 			items: [
 				{
 					title: 'd-ico',
-					code: '<d-ico name="d-ico-star"></d-ico>'
+					html: '<d-ico name="d-ico-star"></d-ico>'
 				},
 				{
 					title: 'd-symbol',
-					code: '<d-symbol name="d-ico-star"\n  style="max-width:5rem;max-height:5rem;fill:blue">\n</d-symbol>'
+					html: '<d-symbol name="d-ico-star"\n  style="max-width:5rem;max-height:5rem;fill:blue">\n</d-symbol>'
 				}
 			]
 		}
