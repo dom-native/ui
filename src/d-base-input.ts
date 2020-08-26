@@ -90,7 +90,7 @@ export abstract class BaseInputElement extends BaseFieldElement {
 			content.appendChild(icoEl);
 		}
 
-		content.appendChild(attr(elem('div'), { class: 'box' }));
+		content.appendChild(attr(elem('div'), { class: 'd-box' }));
 
 		// get the attribute from this d-input to be copied to the input child
 		const [readonly, disabled, placeholder] = attr(this, ['readonly', 'disabled', 'placeholder']);

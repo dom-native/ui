@@ -100,7 +100,7 @@ export class SelectElement extends BaseFieldElement {
 		}
 
 		//// Create Content
-		let tmp = frag(`<label></label><div class="d-ipt"></div><d-ico class="chevron" name="d-ico-chevron-down"></d-ico><div class="box"></div>`);
+		let tmp = frag(`<label></label><div class="d-ipt"></div><d-ico class="chevron" name="d-ico-chevron-down"></d-ico><div class="d-box"></div>`);
 		let els = [...tmp.children];
 		[this.labelEl, this.iptEl] = [...tmp.children] as HTMLElement[];
 		this.labelEl.textContent = label;
