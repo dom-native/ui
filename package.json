@@ -24,7 +24,7 @@
     "tslib": "^2.0.1"
   },
   "devDependencies": {
-    "@dom-native/demo-infra": "0.0.0-internal-1",
+    "@dom-native/demo-infra": "0.0.0-internal-2",
     "cmdrouter": "^0.3.1",
     "dom-native": "^0.9.9",
     "handlebars": "^4.7.6",
