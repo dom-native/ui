@@ -98,7 +98,6 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 	}
 	// Called when an observed attribute has been added, removed, updated, or replaced
 	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
-		super.attributeChangedCallback(attrName, oldVal, newVal); // always
 
 		switch (attrName) {
 			case 'readonly':

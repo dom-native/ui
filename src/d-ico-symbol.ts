@@ -42,7 +42,6 @@ class SymbolElement extends BaseHTMLElement {
 	}
 
 	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
-		super.attributeChangedCallback(attrName, oldVal, newVal); // always
 
 		switch (attrName) {
 			case 'name':
