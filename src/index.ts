@@ -1,6 +1,3 @@
-const __version__ = '0.1.1'; // set by vdev from package.json .version
-export const version = __version__;
-
 export { BaseFieldElement } from './d-base-field';
 export { CheckElement } from './d-check';
 export { InputElement } from './d-input';
