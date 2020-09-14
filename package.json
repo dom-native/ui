@@ -1,6 +1,6 @@
 {
   "name": "@dom-native/ui",
-  "version": "0.1.4",
+  "version": "0.1.5-SNAPSHOT",
   "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
   "main": "dist/index.js",
   "repository": {
@@ -59,7 +59,7 @@
   ],
   "scripts": {
     "prepack": "npm run build",
-    "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build",    
+    "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build",
     "code": "npm run watch & npm run start",
     "sketchdev": "./node-modules/.bin/sketchdev",
     "build-demo-js": "./node_modules/.bin/rollup -c",
