@@ -31,9 +31,7 @@ async function watch() {
 	spawn('npm', ['run', 'build-demo-js', '--', '-w']);
 	spawn('npm', ['run', 'build-demo-css', '--', '-w', '--verbose']);
 
-	// TODO sketch
-
-
+	// // TODO sketch
 	buildDemoCode(true);
 }
 

@@ -2,7 +2,7 @@ import { Symbols } from './symbols';
 
 
 const SVG_SYMBOLS = `
-<svg xmlns="http://www.w3.org/2000/svg" style="width:0; height:0; visibility:hidden; display:none">
+<svg xmlns="http://www.w3.org/2000/svg">
 <symbol id="d-ico-check" viewBox="0 0 24 24"><g id="ico/" stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="d-ico/check" fill-rule="nonzero"> <polygon id="Path" points="8.2255884 16.7829562 3.58145537 12.1388232 2 13.7091416 8.2255884 19.93473 21.59 6.57031836 20.0196816 5"/> </g> </g></symbol>
 <symbol id="d-ico-chevron-down" viewBox="0 0 16 16"><g id="ico/" stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="d-ico/chevron-down" fill-rule="nonzero"> <polygon id="Shape" points="3.41 5 8 9.59 12.59 5 14 6.42 8 12.42 2 6.42"/> </g> </g></symbol>
 <symbol id="d-ico-chevron-right" viewBox="0 0 16 16"><g id="ico/" stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="d-ico/chevron-right"> <polygon id="Shape" transform="translate(8.500000, 8.000000) rotate(-90.000000) translate(-8.500000, -8.000000) " points="3.91 4.5 8.5 8.83018868 13.09 4.5 14.5 5.83962264 8.5 11.5 2.5 5.83962264"/> </g> </g></symbol>

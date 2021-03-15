@@ -10,7 +10,7 @@ import { BaseFieldElement } from './d-base-field';
  * Attributes:
  *   - See BaseFieldElement.
  *   - `popup-css?` the css class text to be added to the `d-select-popup` for custom styling.
- *   - `popup-style?` style text to be added to the `d-select-popup` after the set values (top/left/width)
+ *   - DEPRECATED AND REMOVED (FOR CSP) : `popup-style?` style text to be added to the `d-select-popup` after the set values (top/left/width)
  * 
  * Properties:
  *   - See BaseFieldElement.
@@ -57,7 +57,6 @@ export class SelectElement extends BaseFieldElement {
 	}
 
 	get popupCss(): string | null { return attr(this, 'popup-css') }
-	get popupStyle(): string | null { return attr(this, 'popup-style') }
 
 	//#region    ---------- Component Events ----------
 	triggerData(sendData: SelectDataSender) {
@@ -124,9 +123,8 @@ export class SelectElement extends BaseFieldElement {
 			if (!this.popupShowing && !this.disabled && !this.readonly) {
 				const popupCss = this.popupCss;
 				const cssAttr = (popupCss) ? ` class="${popupCss}" ` : '';
-				const popupStyle = this.popupStyle;
-				const styleAttr = (popupStyle) ? ` style="${popupStyle}" ` : '';
-				let popupFrag = frag(`<d-select-popup${cssAttr}${styleAttr}></d-select-popup>`).firstElementChild as SelectPopupElement;
+				let popupFrag = frag(`<d-select-popup${cssAttr}></d-select-popup>`).firstElementChild as SelectPopupElement;
+
 				popupFrag._options = this.options;
 				popupFrag._select = this;
 

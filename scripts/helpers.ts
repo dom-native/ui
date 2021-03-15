@@ -30,7 +30,7 @@ async function loadBucket(bucketName: string): Promise<Bucket> {
 		throw new Error(`ERROR - loadBucket - cannot find file '${fileName}' is the root or 3 parent directories`)
 	}
 
-	const yamlObj = await yaml(content);
+	const yamlObj: any = await yaml(content);
 	const bucketConfig = yamlObj.buckets?.[bucketName];
 
 	if (bucketConfig == null) {
@@ -64,6 +64,7 @@ type CodeItem = { name: string, code: string };
 
 export async function _generateDemoCodesFile() {
 	const srcFiles = await glob('demo/src/spec*.ts');
+
 	const codeItems: CodeItem[] = [];
 
 	for (const file of srcFiles) {
@@ -71,6 +72,7 @@ export async function _generateDemoCodesFile() {
 		// '//#region    ---------- code: '
 		const CODE_BLOCK_RG = /\/\/#region.*code:\s+(\w+).*[\s\S]([\s\S]*?)\/\/#endregion/gm
 		const m = content.matchAll(CODE_BLOCK_RG);
+		console.log('->> file', file, m);
 		for (const item of m) {
 			const [fullSelection, name, code] = item;
 			codeItems.push({ name, code });
@@ -87,6 +89,10 @@ export const code_${name}	= \`
 ${code}\`;
 
 		`
+	}
+
+	if (codeItems.length == 0) {
+		codeContent = 'export const empty = true;';
 	}
 
 	await writeFile('demo/src/_codes.ts', codeContent, 'utf-8');

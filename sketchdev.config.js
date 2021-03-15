@@ -1,10 +1,10 @@
 
 
 module.exports = {
-	input: 'design.sketch',
+	input: '.design/ui-assets.sketch',
 	output: [{
 		type: 'svg',
-		out: 'svg/sprite.svg',
+		out: '.design/svg/sprite.svg',
 		artboard: /^d-ico\/.*/,
 		flatten: '-'
 	}

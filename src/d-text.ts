@@ -57,9 +57,9 @@ export class TextElement extends BaseInputElement {
 
 
 	//#region    ---------- BaseInput Implementations ---------- 
-	createIptEl(): HTMLInputElement {
+	createIptEl(): HTMLTextAreaElement {
 		//// Build the component HTML
-		const el = elem('textarea') as HTMLInputElement;
+		const el = elem('textarea') as HTMLTextAreaElement;
 		return el;
 	}
 

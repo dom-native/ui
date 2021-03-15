@@ -1,4 +1,4 @@
-import { frag } from 'dom-native';
+import { html } from 'dom-native';
 
 
 export class Symbols {
@@ -10,7 +10,7 @@ export class Symbols {
 
 	load() {
 		document.addEventListener("DOMContentLoaded", async (event) => {
-			document.head.append(frag(this.doc));
+			document.head.append(html(this.doc));
 		});
 	}
 }
