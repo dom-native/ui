@@ -1,6 +1,6 @@
 import { append, attr, elem, on } from 'dom-native';
-import { BaseFieldElement } from './d-base-field';
-import { css } from './utils';
+import { BaseFieldElement } from './d-base-field.js';
+import { css } from './utils.js';
 
 
 /**
@@ -157,5 +157,4 @@ export abstract class BaseInputElement extends BaseFieldElement {
 	abstract createIptEl(): HTMLInputElement | HTMLTextAreaElement
 	abstract getInitialValue(): string | null
 }
-
 

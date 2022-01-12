@@ -1,6 +1,7 @@
 {
   "name": "@dom-native/ui",
-  "version": "0.1.7",
+  "type": "module",
+  "version": "0.2.0",
   "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
   "main": "dist/index.js",
   "repository": {
@@ -21,36 +22,37 @@
     "drag and drop"
   ],
   "dependencies": {
-    "tslib": "^2.1.0"
+    "pcss-cli": "^0.2.1",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@dom-native/demo-infra": "0.0.0-internal-3",
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-multi-entry": "^4.0.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
-    "@types/js-yaml": "^4.0.0",
+    "@dom-native/demo-infra": "0.0.0-internal-4",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-multi-entry": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@types/js-yaml": "^4.0.5",
     "@types/lodash.debounce": "^4.0.6",
-    "autoprefixer": "^10.2.5",
-    "chokidar": "^3.5.1",
-    "cloud-bucket": "^0.3.13",
+    "autoprefixer": "^10.4.2",
+    "chokidar": "^3.5.2",
+    "cloud-bucket": "^0.4.0",
     "cmdrouter": "^0.3.1",
-    "dom-native": "^0.9.21",
+    "dom-native": "^0.10.0",
     "handlebars": "^4.7.7",
-    "js-yaml": "^4.0.0",
+    "js-yaml": "^4.1.0",
     "lodash.debounce": "^4.0.8",
-    "postcss": "^8.2.8",
-    "postcss-cli": "^8.3.1",
-    "postcss-import": "^14.0.0",
-    "postcss-mixins": "^7.0.3",
-    "postcss-nested": "^5.0.5",
-    "rollup": "^2.41.2",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "sketchdev": "^0.6.9",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "postcss": "^8.4.5",
+    "postcss-cli": "^9.1.0",
+    "postcss-import": "^14.0.2",
+    "postcss-mixins": "^9.0.1",
+    "postcss-nested": "^5.0.6",
+    "rollup": "^2.63.0",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "sketchdev": "^0.7.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
   },
   "peerDependencies": {
-    "dom-native": "^0.9.21"
+    "dom-native": "^0.10.0"
   },
   "files": [
     "src/",
@@ -59,12 +61,13 @@
   ],
   "scripts": {
     "prepack": "npm run build",
-    "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build",
+    "build": "TS_NODE_PROJECT='scripts/tsconfig.json' node --loader ts-node/esm ./scripts/cmds.ts build",
+    "build-css": "./node_modules/.bin/pcss",
     "code": "npm run watch & npm run start",
     "sketchdev": "./node_modules/.bin/sketchdev",
     "build-demo-js": "./node_modules/.bin/rollup -c",
     "build-demo-css": "./node_modules/.bin/postcss -o demo/dist/demo-bundle.css  demo/pcss/main.pcss",
-    "build-css": "./node_modules/.bin/postcss -o dist/css/ui.css  pcss/all.pcss",
+    "build-css-old": "./node_modules/.bin/postcss -o dist/css/ui.css  pcss/all.pcss",
     "watch": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts watch",
     "site": "./node_modules/.bin/vdev sup demo/ jc-sites:dom-native/demo/ui/"
   },

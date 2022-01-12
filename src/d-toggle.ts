@@ -1,5 +1,5 @@
 import { attr, elem, on } from 'dom-native';
-import { BaseFieldElement } from './d-base-field';
+import { BaseFieldElement } from './d-base-field.js';
 
 /**
  * Base component for toggle like components 'd-check', 'd-radio'
@@ -134,4 +134,3 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 	//#endregion ---------- /Lifecycle ---------- 
 
 }
-

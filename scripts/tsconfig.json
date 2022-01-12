@@ -4,7 +4,7 @@
 		"target": "esNext",
 
 		// For the node.js context, so, target commonjs otherwise, cannot run in node
-		"module": "commonjs",
+		"module": "ESNext",
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
 		"moduleResolution": "node", 

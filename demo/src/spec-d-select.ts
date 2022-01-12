@@ -1,7 +1,7 @@
 import { CodeDoc, SpecView } from '@dom-native/demo-infra';
 import { customElement, onEvent, OnEvent } from 'dom-native';
 import { wait } from 'utils-min';
-import { SelectDataSender, SelectOption } from '../../src/index';
+import { SelectDataSender, SelectOption } from '../../src/index.js';
 
 
 @customElement('spec-d-select')

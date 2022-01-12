@@ -1,5 +1,5 @@
 import { attr, customElement, elem } from 'dom-native';
-import { BaseInputElement } from './d-base-input';
+import { BaseInputElement } from './d-base-input.js';
 
 
 /**
@@ -74,5 +74,4 @@ export class InputElement extends BaseInputElement {
 	//#endregion ---------- /BaseInput Implementations ---------- 
 
 }
-
 

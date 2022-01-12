@@ -1,6 +1,6 @@
 import { all, attr, customElement } from 'dom-native';
-import { htmlSvgSymbol } from './d-ico-symbol';
-import { BaseToggleElement } from './d-toggle';
+import { htmlSvgSymbol } from './d-ico-symbol.js';
+import { BaseToggleElement } from './d-toggle.js';
 
 /**
  * d-radio custom element encapsulate a checkbox true/false component with or without label concept.
@@ -85,4 +85,3 @@ export class RadioElement extends BaseToggleElement {
 
 
 }
-

@@ -1,5 +1,5 @@
 import { all, attr, customElement, first, on } from 'dom-native';
-import { BaseFieldElement } from './d-base-field';
+import { BaseFieldElement } from './d-base-field.js';
 
 /**
  * COMPONENT NOT SUPPORTED YET. Just placeholder code. 

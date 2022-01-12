@@ -1,5 +1,5 @@
 import { BaseHTMLElement, customElement } from 'dom-native';
-import { BaseFieldElement } from './d-base-field';
+import { BaseFieldElement } from './d-base-field.js';
 
 /** Public api to generage a symbol svg reference */
 export function htmlSvgSymbol(name: string) {
@@ -91,7 +91,6 @@ export class IcoElement extends SymbolElement {
 
 }
 //#endregion ---------- /d-ico ----------
-
 
 
 

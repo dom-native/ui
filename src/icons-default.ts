@@ -1,4 +1,4 @@
-import { Symbols } from './symbols';
+import { Symbols } from './symbols.js';
 
 
 const SVG_SYMBOLS = `

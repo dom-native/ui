@@ -2,7 +2,7 @@
 // Making sure the ts helper for decorator is set
 import { attr, BaseHTMLElement, puller, pusher, trigger } from 'dom-native';
 import { __decorate } from 'tslib';
-import { css } from './utils';
+import { css } from './utils.js';
 if ((<any>window).__decorate == null) {
 	(<any>window).__decorate = __decorate;
 }

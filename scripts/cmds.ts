@@ -1,7 +1,7 @@
 import { router } from 'cmdrouter';
 import { saferRemove } from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
-import { buildDemoCode, uploadSite } from './helpers';
+import { buildDemoCode, uploadSite } from './helpers.js';
 
 
 const SKETCH_PATH = '.design/ui-assets.sketch';
@@ -12,7 +12,7 @@ router({ build, watch, site }).route();
 async function build() {
 	await saferRemove('./dist');
 
-	// TODO:
+	// TODO - enable demo css 
 	// await sketch();
 
 	// build the dist/css/ui.css
@@ -22,17 +22,19 @@ async function build() {
 	await spawn('./node_modules/.bin/tsc');
 }
 
-
+// FIXME - disabled since ESM update
 async function watch() {
 	await saferRemove('./demo/dist');
 
 	// generate first to have the ts able to compile
 	await buildDemoCode(false);
-	spawn('npm', ['run', 'build-demo-js', '--', '-w']);
-	spawn('npm', ['run', 'build-demo-css', '--', '-w', '--verbose']);
+
+	// TODO - re-enable the demo building
+	// spawn('npm', ['run', 'build-demo-js', '--', '-w']);
+	// spawn('npm', ['run', 'build-demo-css', '--', '-w', '--verbose']);
 
 	// // TODO sketch
-	buildDemoCode(true);
+	// buildDemoCode(true);
 }
 
 async function dev() {

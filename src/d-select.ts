@@ -1,5 +1,5 @@
 import { all, append, attr, BaseHTMLElement, customElement, elem, first, frag, off, on, style, trigger } from 'dom-native';
-import { BaseFieldElement } from './d-base-field';
+import { BaseFieldElement } from './d-base-field.js';
 
 /**
  * d-select is a select component.
