@@ -1,53 +1,8 @@
 import chokidar from 'chokidar';
-import { Bucket, getBucket } from 'cloud-bucket';
-import { glob } from 'fs-extra-plus';
-import * as jsyaml from 'js-yaml';
+import { glob } from 'fs-aux';
+import { readFile, writeFile } from 'fs/promises';
 import debounce from 'lodash.debounce';
-import * as Path from 'path';
-const { pathExists, readFile, writeFile } = (await import('fs-extra-plus')).default;
 
-//#region    ---------- site ---------- 
-
-export async function uploadSite(localDir: string, bucketRoot: string) {
-	const bucket = await loadBucket('jc-sites');
-	await bucket.upload(localDir, bucketRoot);
-}
-
-async function loadBucket(bucketName: string): Promise<Bucket> {
-	const fileName = '.buckets.yaml';
-	let relDir = './';
-	let content: string | undefined;
-	let file: string | undefined;
-	for (let i = 0; i < 3; i++) {
-		file = Path.join(relDir, fileName);
-		if (await pathExists(file)) {
-			content = await readFile(file, 'utf-8');
-			break;
-		}
-		relDir += '../';
-	}
-
-	if (content == null) {
-		throw new Error(`ERROR - loadBucket - cannot find file '${fileName}' is the root or 3 parent directories`)
-	}
-
-	const yamlObj: any = await yaml(content);
-	const bucketConfig = yamlObj.buckets?.[bucketName];
-
-	if (bucketConfig == null) {
-		throw new Error(`ERROR - loadBucket - cannot find 'buckets.${bucketName}' in yaml file ${file}`);
-	}
-	return getBucket({ ...bucketConfig, log: true });
-}
-
-async function yaml(content: string) {
-	const yamlObj = jsyaml.load(content);
-	if (!yamlObj) {
-		throw new Error(`Could not load yaml`);
-	}
-	return yamlObj;
-}
-//#endregion ---------- /site ---------- 
 
 //#region    ---------- demo code ---------- 
 export async function buildDemoCode(watch = false) {
@@ -73,7 +28,7 @@ export async function _generateDemoCodesFile() {
 		// '//#region    ---------- code: '
 		const CODE_BLOCK_RG = /\/\/#region.*code:\s+(\w+).*[\s\S]([\s\S]*?)\/\/#endregion/gm
 		const m = content.matchAll(CODE_BLOCK_RG);
-		console.log('->> file', file, m);
+
 		for (const item of m) {
 			const [fullSelection, name, code] = item;
 			codeItems.push({ name, code });

@@ -1,7 +1,7 @@
 import { router } from 'cmdrouter';
-import { saferRemove } from 'fs-extra-plus';
+import { saferRemove } from 'fs-aux';
 import { spawn } from 'p-spawn';
-import { buildDemoCode, uploadSite } from './helpers.js';
+import { buildDemoCode } from './helpers.js';
 
 
 const SKETCH_PATH = '.design/ui-assets.sketch';
@@ -30,11 +30,11 @@ async function watch() {
 	await buildDemoCode(false);
 
 	// TODO - re-enable the demo building
-	// spawn('npm', ['run', 'build-demo-js', '--', '-w']);
-	// spawn('npm', ['run', 'build-demo-css', '--', '-w', '--verbose']);
+	spawn('npm', ['run', 'build-demo-js', '--', '-w']);
+	spawn('npm', ['run', 'build-css', '--', '-w', '--verbose']);
 
 	// // TODO sketch
-	// buildDemoCode(true);
+	buildDemoCode(true);
 }
 
 async function dev() {
@@ -43,11 +43,13 @@ async function dev() {
 }
 
 async function site() {
-	await uploadSite('demo/', 'dom-native/demo/draggable/');
+	// await uploadSite('demo/', 'dom-native/demo/draggable/');
+	// TODO - call ss3
 }
 
 
 // async function sketch() {
+	
 // 	const outDir = '.design/out';
 // 	await saferRemove(outDir);
 // 	await mkdir(outDir);

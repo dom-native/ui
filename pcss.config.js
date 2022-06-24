@@ -10,15 +10,27 @@ const plugins = [
 	nested
 ];
 
-export default {
+export default [{
 	// required. Support single string, or array, will be processed in order
 	input: ['pcss/all.pcss'],
 
 	// required. single css file supported for now. 
 	output: 'dist/css/ui.css',
 
-	watchPath: ['./**/*.pcss', '../_common/**/*.pcss'],
+	watchPath: ['./**/*.pcss'],
+
+	// postcss processor arrays
+	plugins
+},
+{
+	input: ['demo/pcss/main.pcss'],
+
+	// required. single css file supported for now. 
+	output: 'demo/dist/demo-bundle.css',
+
+	watchPath: ['./**/*.pcss'],
 
 	// postcss processor arrays
 	plugins
 }
+]
