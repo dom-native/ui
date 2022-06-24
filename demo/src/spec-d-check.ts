@@ -1,7 +1,6 @@
 import { CodeDoc, simplePull, SpecView } from '@dom-native/demo-infra';
 import { customElement } from 'dom-native';
 
-
 @customElement('spec-d-check')
 export class SpecMCheckView extends SpecView {
 	name = 'spec-d-check'
