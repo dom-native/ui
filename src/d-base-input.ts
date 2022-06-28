@@ -1,4 +1,4 @@
-import { append, attr, elem, on } from 'dom-native';
+import { append, elem, getAttr, on, setAttr } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 import { css } from './utils.js';
 
@@ -51,7 +51,7 @@ export abstract class BaseInputElement extends BaseFieldElement {
 		// Add ico-lead if needed
 		const icoLead = this.icoLead;
 		if (icoLead) {
-			const icoEl = attr(elem('d-ico'), { 'name': icoLead, 'class': 'lead' });
+			const icoEl = setAttr(elem('d-ico'), { 'name': icoLead, 'class': 'lead' });
 			content.appendChild(icoEl);
 		}
 
@@ -60,7 +60,7 @@ export abstract class BaseInputElement extends BaseFieldElement {
 		this.inputEl.classList.add('d-ipt');
 		content.appendChild(this.inputEl);
 
-		const [label, labelTrail, textTrail] = attr(this, ['label', 'label-trail', 'text-trail']);
+		const [label, labelTrail, textTrail] = getAttr(this, 'label', 'label-trail', 'text-trail');
 
 		// add the label
 		if (label) {
@@ -71,14 +71,14 @@ export abstract class BaseInputElement extends BaseFieldElement {
 
 		// add the label-trail
 		if (labelTrail) {
-			const labelTrailEl = attr(elem('label'), { 'class': 'label-trail' });
+			const labelTrailEl = setAttr(elem('label'), { 'class': 'label-trail' });
 			labelTrailEl.textContent = labelTrail;
 			content.appendChild(labelTrailEl);
 		}
 
 		// add the text-trail 
 		if (textTrail) {
-			const textTrailEl = attr(elem('div'), { 'class': 'text-trail' });
+			const textTrailEl = setAttr(elem('div'), { 'class': 'text-trail' });
 			textTrailEl.textContent = textTrail;
 			content.appendChild(textTrailEl);
 		}
@@ -86,15 +86,15 @@ export abstract class BaseInputElement extends BaseFieldElement {
 		// Add the ico-trail if needed
 		const icoTrail = this.icoTrail;
 		if (icoTrail) {
-			const icoEl = attr(elem('d-ico'), { 'name': icoTrail, 'class': 'trail' });
+			const icoEl = setAttr(elem('d-ico'), { 'name': icoTrail, 'class': 'trail' });
 			content.appendChild(icoEl);
 		}
 
-		content.appendChild(attr(elem('div'), { class: 'd-box' }));
+		content.appendChild(setAttr(elem('div'), { class: 'd-box' }));
 
 		// get the attribute from this d-input to be copied to the input child
-		const [readonly, disabled, placeholder] = attr(this, ['readonly', 'disabled', 'placeholder']);
-		attr(this.inputEl, { readonly, disabled, placeholder });
+		const [readonly, disabled, placeholder] = getAttr(this, 'readonly', 'disabled', 'placeholder');
+		setAttr(this.inputEl, { readonly, disabled, placeholder });
 
 		const value = this.getInitialValue();
 		this.value = value;
@@ -134,13 +134,13 @@ export abstract class BaseInputElement extends BaseFieldElement {
 		if (this.initialized) {
 			switch (name) {
 				case 'readonly':
-					attr(this.inputEl, { readonly: newVal });
+					setAttr(this.inputEl, { readonly: newVal });
 					break;
 				case 'disabled':
-					attr(this.inputEl, { disabled: newVal });
+					setAttr(this.inputEl, { disabled: newVal });
 					break;
 				case 'placeholder':
-					attr(this.inputEl, { placeholder: newVal });
+					setAttr(this.inputEl, { placeholder: newVal });
 					break;
 			}
 		}

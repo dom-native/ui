@@ -1,4 +1,4 @@
-import { all, append, attr, BaseHTMLElement, customElement, elem, first, frag, off, on, style, trigger } from 'dom-native';
+import { all, append, BaseHTMLElement, customElement, elem, first, frag, getAttr, off, on, setAttr, style, trigger } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 
 /**
@@ -52,11 +52,11 @@ export class SelectElement extends BaseFieldElement {
 		return this.getAttribute('value');
 	}
 	set value(v: string | null) {
-		attr(this, 'value', v);
+		setAttr(this, 'value', v);
 		this.refresh();
 	}
 
-	get popupCss(): string | null { return attr(this, 'popup-css') }
+	get popupCss(): string | null { return getAttr(this, 'popup-css') }
 
 	//#region    ---------- Component Events ----------
 	triggerData(sendData: SelectDataSender) {
@@ -72,7 +72,7 @@ export class SelectElement extends BaseFieldElement {
 		super.init();
 
 
-		const [label, value] = attr(this, ['label', 'value']);
+		const [label, value] = getAttr(this, 'label', 'value');
 
 		//// create the appropriate this.options list from content HTML
 		const firstElement = this.firstElementChild;
@@ -108,7 +108,7 @@ export class SelectElement extends BaseFieldElement {
 		// Add ico-lead if needed
 		const icoLead = this.icoLead;
 		if (icoLead) {
-			const icoEl = attr(elem('d-ico'), { 'name': icoLead, 'class': 'lead' });
+			const icoEl = setAttr(elem('d-ico'), { 'name': icoLead, 'class': 'lead' });
 			append(tmp, icoEl, 'first');
 		}
 
@@ -219,7 +219,7 @@ class SelectPopupElement extends BaseHTMLElement {
 		// events
 		on(this, 'click', 'li', (evt) => {
 			const li = evt.selectTarget;
-			const value = attr(li, 'data-val');
+			const value = getAttr(li, 'data-val');
 			trigger(this, 'SELECT', { detail: { value } })
 			this.remove();
 		});

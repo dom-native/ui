@@ -1,4 +1,4 @@
-import { attr, elem, on } from 'dom-native';
+import { elem, getAttr, on, setAttr } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 
 /**
@@ -36,11 +36,11 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 
 	//// Properties (Attribute Reflective)
 	get checked() { return this.hasAttribute('checked') }
-	set checked(v: boolean) { attr(this, { checked: v }) }
+	set checked(v: boolean) { setAttr(this, { checked: v }) }
 
 	//// Property (Value)
 	get value() {
-		const attrValue = attr(this, 'value');
+		const attrValue = getAttr(this, 'value');
 		const checked = this.checked;
 		// if we have a attribute value return it 
 		if (attrValue) {
@@ -57,7 +57,7 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 		}
 		// otherwise, we assume we have attr
 		else {
-			const attrValue = attr(this, 'value');
+			const attrValue = getAttr(this, 'value');
 			if (attrValue) {
 				this.checked = (attrValue === v);
 			}
@@ -80,7 +80,7 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 		const content = document.createDocumentFragment();
 
 		// create the label element if defined
-		const label = attr(this, 'label');
+		const label = getAttr(this, 'label');
 		if (label != null) { // empty string will create an empty label
 			this.labelEl = elem('label');
 			this.labelEl.textContent = label;
@@ -90,7 +90,7 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 		// create the .d-ipt element
 		// Note: here we render the iptContent before setting the this.d-iptEl allowing the renderIptContent to know if it is initial or post rendering
 		const iptContent = this.renderIptContent()!;
-		this.iptEl = attr(elem('div'), { class: 'd-ipt' });
+		this.iptEl = setAttr(elem('div'), { class: 'd-ipt' });
 		this.iptEl.innerHTML = iptContent;
 		content.append(this.iptEl);
 

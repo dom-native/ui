@@ -1,4 +1,4 @@
-import { attr, customElement, elem } from 'dom-native';
+import { customElement, elem, getAttr } from 'dom-native';
 import { BaseInputElement } from './d-base-input.js';
 
 
@@ -69,7 +69,7 @@ export class InputElement extends BaseInputElement {
 	}
 
 	getInitialValue() {
-		return attr(this, 'value');
+		return getAttr(this, 'value');
 	}
 	//#endregion ---------- /BaseInput Implementations ---------- 
 

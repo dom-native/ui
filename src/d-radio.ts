@@ -1,4 +1,4 @@
-import { all, attr, customElement } from 'dom-native';
+import { all, customElement, setAttr } from 'dom-native';
 import { htmlSvgSymbol } from './d-ico-symbol.js';
 import { BaseToggleElement } from './d-toggle.js';
 
@@ -51,7 +51,7 @@ export class RadioElement extends BaseToggleElement {
 			}
 		}
 
-		attr(this, { checked: v });
+		setAttr(this, { checked: v });
 	}
 
 

@@ -1,6 +1,6 @@
 
 // Making sure the ts helper for decorator is set
-import { attr, BaseHTMLElement, puller, pusher, trigger } from 'dom-native';
+import { BaseHTMLElement, getAttr, puller, pusher, setAttr, trigger } from 'dom-native';
 import { __decorate } from 'tslib';
 import { css } from './utils.js';
 if ((<any>window).__decorate == null) {
@@ -53,20 +53,20 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 
 	//// Properties (Attribute Reflective)
 	get readonly(): boolean { return this.hasAttribute('readonly') };
-	set readonly(v: boolean) { attr(this, 'readonly', (v) ? '' : null) };
+	set readonly(v: boolean) { setAttr(this, 'readonly', (v) ? '' : null) };
 
 	get disabled(): boolean { return this.hasAttribute('disabled') };
-	set disabled(v: boolean) { attr(this, 'disabled', (v) ? '' : null) };
+	set disabled(v: boolean) { setAttr(this, 'disabled', (v) ? '' : null) };
 
-	get name() { return attr(this, 'name') };
-	set name(v: string | null) { attr(this, 'name', v) };
+	get name() { return getAttr(this, 'name') };
+	set name(v: string | null) { setAttr(this, 'name', v) };
 
-	get placeholder() { return attr(this, 'placeholder') };
-	set placeholder(v: string | null) { attr(this, 'placeholder', v) };
+	get placeholder() { return getAttr(this, 'placeholder') };
+	set placeholder(v: string | null) { setAttr(this, 'placeholder', v) };
 
-	get icoLead() { return attr(this, 'ico-lead') };
+	get icoLead() { return getAttr(this, 'ico-lead') };
 
-	get icoTrail() { return attr(this, 'ico-trail') };
+	get icoTrail() { return getAttr(this, 'ico-trail') };
 
 	//// Properties (CSS Reflective)
 	get noValue() { return this.classList.contains('no-value') };
@@ -82,7 +82,7 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 
 		this.classList.add('d-field');
 
-		const [name, label] = attr(this, ['name', 'label']);
+		const [name, label] = getAttr(this, 'name', 'label');
 
 		if (!label) {
 			this.classList.add('no-label');
@@ -98,7 +98,6 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 	}
 	// Called when an observed attribute has been added, removed, updated, or replaced
 	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
-
 		switch (attrName) {
 			case 'readonly':
 				break;

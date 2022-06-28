@@ -1,4 +1,4 @@
-import { all, attr, customElement, first, on } from 'dom-native';
+import { all, attr, customElement, first, getAttr, on } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 
 /**
@@ -66,7 +66,7 @@ export class OptionsElement extends BaseFieldElement {
 	init() {
 		super.init();
 
-		const [options, value] = attr(this, ['options', 'value']);
+		const [options, value] = getAttr(this, 'options', 'value');
 
 		//// Build the component HTML
 		let html = '<div class="d-ipt">';
