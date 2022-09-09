@@ -1,7 +1,7 @@
 {
   "name": "@dom-native/ui",
   "type": "module",
-  "version": "0.2.2",
+  "version": "0.2.3-SNAPSHOT",
   "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
   "main": "dist/index.js",
   "scripts": {
