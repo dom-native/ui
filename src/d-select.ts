@@ -1,4 +1,4 @@
-import { all, append, BaseHTMLElement, customElement, elem, first, frag, getAttr, off, on, setAttr, style, trigger } from 'dom-native';
+import { all, append, BaseHTMLElement, customElement, elem, first, getAttr, html, off, on, setAttr, style, trigger } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 
 /**
@@ -99,7 +99,7 @@ export class SelectElement extends BaseFieldElement {
 		}
 
 		//// Create Content
-		let tmp = frag(`<label></label><div class="d-ipt"></div><d-ico class="chevron" name="d-ico-chevron-down"></d-ico><div class="d-box"></div>`);
+		let tmp = html(`<label></label><div class="d-ipt"></div><d-ico class="chevron" name="d-ico-chevron-down"></d-ico><div class="d-box"></div>`);
 		let els = [...tmp.children];
 		[this.labelEl, this.iptEl] = [...tmp.children] as HTMLElement[];
 		this.labelEl.textContent = label;
@@ -123,7 +123,7 @@ export class SelectElement extends BaseFieldElement {
 			if (!this.popupShowing && !this.disabled && !this.readonly) {
 				const popupCss = this.popupCss;
 				const cssAttr = (popupCss) ? ` class="${popupCss}" ` : '';
-				let popupFrag = frag(`<d-select-popup${cssAttr}></d-select-popup>`).firstElementChild as SelectPopupElement;
+				let popupFrag = html(`<d-select-popup${cssAttr}></d-select-popup>`).firstElementChild as SelectPopupElement;
 
 				popupFrag._options = this.options;
 				popupFrag._select = this;
