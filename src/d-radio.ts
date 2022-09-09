@@ -1,6 +1,27 @@
-import { all, customElement, setAttr } from 'dom-native';
-import { htmlSvgSymbol } from './d-ico-symbol.js';
+import { adoptStyleSheets, all, css, customElement, setAttr } from 'dom-native';
+import { svgSymbolEl } from './d-ico-symbol.js';
 import { BaseToggleElement } from './d-toggle.js';
+
+const _shadow_css = css`
+
+	::slotted(svg.symbol) {
+		fill: var(--d-field-choice-bdr);
+	}
+	
+	.d-ipt{
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.d-ipt svg.symbol {
+		fill: var(--d-field-choice-bdr);
+	}
+
+	:host([checked]) ::slotted(svg.symbol) {
+		fill: var(--d-field-choice-bdr-on);
+	}
+
+`;
 
 /**
  * d-radio custom element encapsulate a checkbox true/false component with or without label concept.
@@ -31,7 +52,7 @@ import { BaseToggleElement } from './d-toggle.js';
  */
 
 @customElement("d-radio")
-export class RadioElement extends BaseToggleElement {
+export class DRadioElement extends BaseToggleElement {
 	// allow to have only the first checked prop change managing the group
 	ignoreGroup = false;
 
@@ -40,7 +61,7 @@ export class RadioElement extends BaseToggleElement {
 		if (!this.ignoreGroup) {
 			const container = this.parentElement;
 			if (container) {
-				const radios = all(container, `d-radio[name=${this.name}]`) as RadioElement[];
+				const radios = all(container, `d-radio[name=${this.name}]`) as DRadioElement[];
 				for (const radio of radios) {
 					if (radio != this && radio.checked) {
 						radio.ignoreGroup = true;
@@ -65,12 +86,16 @@ export class RadioElement extends BaseToggleElement {
 	set value(v: any) { super.value = v };
 
 
+	constructor() {
+		super();
+		adoptStyleSheets(this, _shadow_css);
+	}
 
 
 	//#region    ---------- base-toggle implementations ---------- 
-	renderIptContent(): string | undefined {
+	renderVisualEl(): Element {
 		const icoName = (this.checked) ? 'd-ico-radio-on' : 'd-ico-radio-off';
-		return htmlSvgSymbol(icoName);
+		return svgSymbolEl(icoName, { slot: 'visual' });
 	}
 
 	handleClick(): void {
@@ -81,7 +106,9 @@ export class RadioElement extends BaseToggleElement {
 		}
 	}
 	//#endregion ---------- /base-toggle implementations ---------- 
-
-
-
+}
+declare global {
+	interface HTMLElementTagNameMap {
+		'd-radio': DRadioElement;
+	}
 }

@@ -1,8 +1,7 @@
 
 // Making sure the ts helper for decorator is set
-import { BaseHTMLElement, getAttr, puller, pusher, setAttr, trigger } from 'dom-native';
+import { BaseHTMLElement, className, getAttr, on, puller, pusher, setAttr, trigger } from 'dom-native';
 import { __decorate } from 'tslib';
-import { css } from './utils.js';
 if ((<any>window).__decorate == null) {
 	(<any>window).__decorate = __decorate;
 }
@@ -49,28 +48,39 @@ if ((<any>window).__decorate == null) {
  */
 export abstract class BaseFieldElement extends BaseHTMLElement {
 
+
+	private _eventReady = false;
+	/** 
+	 * Determine if this field is event ready (can fire CHANGE and such events)
+	 * This is next nextFrame of init so that does not trigger uncessary CHANGE event on DOM setup
+	 */
+	protected get eventReady() { return this._eventReady }
+
 	static get observedAttributes(): string[] { return ['disabled', 'readonly', 'placeholder', 'ico-lead']; }
 
 	//// Properties (Attribute Reflective)
-	get readonly(): boolean { return this.hasAttribute('readonly') };
-	set readonly(v: boolean) { setAttr(this, 'readonly', (v) ? '' : null) };
+	get readonly(): boolean { return this.hasAttribute('readonly') }
+	set readonly(v: boolean) { setAttr(this, 'readonly', (v) ? '' : null) }
 
-	get disabled(): boolean { return this.hasAttribute('disabled') };
-	set disabled(v: boolean) { setAttr(this, 'disabled', (v) ? '' : null) };
+	get disabled(): boolean { return this.hasAttribute('disabled') }
+	set disabled(v: boolean) { setAttr(this, 'disabled', (v) ? '' : null) }
 
-	get name() { return getAttr(this, 'name') };
-	set name(v: string | null) { setAttr(this, 'name', v) };
+	get dFocus(): boolean { return this.classList.contains('d-focus') }
+	set dFocus(v: boolean) { className(this, { 'd-focus': v }) }
 
-	get placeholder() { return getAttr(this, 'placeholder') };
-	set placeholder(v: string | null) { setAttr(this, 'placeholder', v) };
+	get name() { return getAttr(this, 'name') }
+	set name(v: string | null) { setAttr(this, 'name', v) }
 
-	get icoLead() { return getAttr(this, 'ico-lead') };
+	get placeholder() { return getAttr(this, 'placeholder') }
+	set placeholder(v: string | null) { setAttr(this, 'placeholder', v) }
 
-	get icoTrail() { return getAttr(this, 'ico-trail') };
+	get iconLead() { return getAttr(this, 'icon-lead') }
+
+	get iconTrail() { return getAttr(this, 'icon-trail') }
 
 	//// Properties (CSS Reflective)
-	get noValue() { return this.classList.contains('no-value') };
-	set noValue(v: boolean) { css(this, { 'no-value': v }) };
+	get noValue() { return this.classList.contains('no-value') }
+	set noValue(v: boolean) { className(this, { 'no-value': v }) }
 
 	//// Property (Value)
 	abstract get value(): any
@@ -81,6 +91,18 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 		super.init(); // best practice, even if it in this case, the parent.init() is blank. 
 
 		this.classList.add('d-field');
+
+		// for now until @onEvents supports :host - @onEvent('focusin, focusout', ':host')
+		on(this, 'focusin, focusout', evt => {
+			switch (evt.type) {
+				case 'focusin':
+					this.dFocus = true;
+					break;
+				case 'focusout':
+					this.dFocus = false;
+					break;
+			}
+		})
 
 		const [name, label] = getAttr(this, 'name', 'label');
 
@@ -95,9 +117,17 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 		if (name && name.length > 0) {
 			this.classList.add('dx');
 		}
+
+
+		requestAnimationFrame(() => {
+			this._eventReady = true;
+		});
 	}
+
+
 	// Called when an observed attribute has been added, removed, updated, or replaced
 	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
+
 		switch (attrName) {
 			case 'readonly':
 				break;
@@ -109,13 +139,15 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 
 
 	triggerChange() {
-		// Will trigger only if the component has been initialized
-		if (this.initialized) {
+		// Will trigger only if the component has been initialized and event ready
+		if (this.initialized && this.eventReady) {
 			const value = this.value;
 			const name = this.name;
 			trigger(this, "CHANGE", { detail: { name, value } });
 		}
 	}
+
+
 
 }
 

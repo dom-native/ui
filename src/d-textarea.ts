@@ -1,4 +1,4 @@
-import { customElement, elem } from 'dom-native';
+import { customElement, elem, getAttr } from 'dom-native';
 import { BaseInputElement } from './d-base-input.js';
 
 
@@ -12,7 +12,6 @@ import { BaseInputElement } from './d-base-input.js';
  * Attributes: 
  *   - See BaseFieldElement.
  *   - `password?`: set input as password
- * 
  * 
  * Properties: 
  *   - See BaseFieldElement.
@@ -28,19 +27,19 @@ import { BaseInputElement } from './d-base-input.js';
  *   - `CHANGE` see BaseFieldElement.
  * 
  */
-@customElement("d-text")
-export class TextElement extends BaseInputElement {
-	inputEl!: HTMLTextAreaElement
+@customElement("d-textarea")
+export class DTextareaElement extends BaseInputElement {
+	ctrlEl!: HTMLTextAreaElement
 
 	//// Property (Value)
-	get value() { return this.inputEl.value };
+	get value() { return this.ctrlEl.value };
 	set value(val: any) { // today takes any, will get parsed by standard html input element .value
-		const inputEl = this.inputEl;
-		const old = inputEl.value;
+
+		const old = this.value;
 
 		// set the value. Note that if the UI call this setter, will always be ===
 		if (val !== old) {
-			this.inputEl.value = val;
+			this.ctrlEl.value = val;
 		}
 
 		// get the value from input so that we use the html input parsing behavior
@@ -57,15 +56,31 @@ export class TextElement extends BaseInputElement {
 
 
 	//#region    ---------- BaseInput Implementations ---------- 
-	createIptEl(): HTMLTextAreaElement {
+	createCtrlEl(): HTMLTextAreaElement {
 		//// Build the component HTML
-		const el = elem('textarea') as HTMLTextAreaElement;
-		return el;
+		return elem('textarea');
 	}
 
 	getInitialValue() {
-		return this.textContent;
+
+		// --- First try to get it from the d-textarea content (first text node)
+		for (let el of this.childNodes) {
+			if (el.nodeType == Node.TEXT_NODE) {
+				const content = el.textContent;
+				// return only if the trim is not empty (but return the full value)
+				if (content && content.trim().length > 0) {
+					return content;
+				}
+			}
+		}
+		// otherwise, return the attribute value name "value" (could be null, which will be a no value)
+		return getAttr(this, 'value');
 	}
 	//#endregion ---------- /BaseInput Implementations ----------
 }
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'd-textarea': DTextareaElement;
+	}
+}

@@ -1,5 +1,11 @@
-import { elem, getAttr, on, setAttr } from 'dom-native';
+import { elem, first, getAttr, html, on, setAttr } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
+
+
+const SHADOW_CONTENT = html`
+		<slot name="label"></slot>
+		<slot name="visual"></slot>
+`;
 
 /**
  * Base component for toggle like components 'd-check', 'd-radio'
@@ -31,26 +37,30 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 	static get observedAttributes() { return BaseFieldElement.observedAttributes.concat(['checked']) }
 
 	//// private elements
-	protected labelEl?: HTMLElement;
-	protected iptEl?: HTMLElement;
+	protected labelEl!: HTMLElement;
+	// protected ctrlEl!: HTMLElement;
 
 	//// Properties (Attribute Reflective)
 	get checked() { return this.hasAttribute('checked') }
 	set checked(v: boolean) { setAttr(this, { checked: v }) }
 
+	abstract renderVisualEl(): Element;
+	abstract handleClick(): void;
+
 	//// Property (Value)
-	get value() {
-		const attrValue = getAttr(this, 'value');
+	get value(): boolean | string {
+		const attrValue = getAttr(this, 'value') as string | null;
 		const checked = this.checked;
 		// if we have a attribute value return it 
 		if (attrValue) {
-			return (checked) ? attrValue : false; // could have return undefined rather than false, but decide to always return a value.
-		}
-		else {
+			// Note: here, we could return null, but return false make the getter/setter symetrical 
+			//       as accepting null in the setter might not be the right choice.
+			return (checked) ? attrValue : false;
+		} else {
 			return checked;
 		}
 	}
-	set value(v: any) {
+	set value(v: boolean | string) {
 		// if it is a boolean, then, just pass the value
 		if (typeof v === 'boolean') {
 			this.checked = v;
@@ -68,37 +78,32 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 		}
 	}
 
+	constructor() {
+		super();
+
+		const shadow = this.attachShadow({ mode: 'open' });
+		shadow.append(SHADOW_CONTENT.cloneNode(true));
+	}
+
 
 	//#region    ---------- Lifecycle ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
-		super.init(); // just call it for BaseFieldElement sub classes.
+		super.init();
 
-		//// NOTE: Here we create the inner elements and assign it to component properties while avoiding any dom query for performance reason. 
-		////       We use the documentFragment to concatinate the needed element before adding them to this component. 
-		//// NOTE: This is way of building inner content is consistent with a component shadow DOM approach.
-		const content = document.createDocumentFragment();
+		// The switch element have their on tabindex (as they do not wrap any native control)
+		this.setAttribute('tabindex', '0');
 
-		// create the label element if defined
 		const label = getAttr(this, 'label');
 		if (label != null) { // empty string will create an empty label
-			this.labelEl = elem('label');
-			this.labelEl.textContent = label;
-			content.appendChild(this.labelEl);
+			let labelEl = elem('label', { slot: 'label', $: { textContent: label } });
+			this.appendChild(labelEl);
 		}
 
-		// create the .d-ipt element
-		// Note: here we render the iptContent before setting the this.d-iptEl allowing the renderIptContent to know if it is initial or post rendering
-		const iptContent = this.renderIptContent()!;
-		this.iptEl = setAttr(elem('div'), { class: 'd-ipt' });
-		this.iptEl.innerHTML = iptContent;
-		content.append(this.iptEl);
-
-		// append the elements needed
-		this.appendChild(content);
+		this.appendChild(this.renderVisualEl());
 
 		//// Bind internal component events
-		on(this, 'click', (evt) => {
+		on(this, 'pointerup', (evt) => {
 			// handle click only if not disabled or not readonly
 			// NOTE: JS logic can still change .checked property
 			if (!this.disabled && !this.readonly) {
@@ -107,11 +112,6 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 		});
 	}
 
-	/** Return the innerHTML content for the .d-iptEl. If undefined, .d-iptEl innerHTML won't be updated (allows uncessary updates) */
-	abstract renderIptContent(): string | undefined;
-
-	abstract handleClick(): void;
-
 	attributeChangedCallback(name: string, oldVal: any, newVal: any) {
 		super.attributeChangedCallback(name, oldVal, newVal); // always
 
@@ -119,10 +119,11 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 			switch (name) {
 				case 'checked':
 					if (oldVal !== newVal) {
-						const iptContent = this.renderIptContent();
+						const visualEl = this.renderVisualEl();
 						// If the renderer does not render something, means no need to update
-						if (iptContent) {
-							this.iptEl!.innerHTML = iptContent;
+						if (visualEl) {
+							first(this, '[slot="visual"]')?.remove();
+							this.appendChild(visualEl);
 						}
 						this.triggerChange();
 					}

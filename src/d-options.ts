@@ -32,11 +32,11 @@ import { BaseFieldElement } from './d-base-field.js';
  */
 
 @customElement('d-options')
-export class OptionsElement extends BaseFieldElement {
+export class DOptionElement extends BaseFieldElement {
 
 	//// Poperty (Value)
 	get value(): string | null {
-		const selEl = first('.d-ipt > div.sel');
+		const selEl = first(this, '.d-ipt > div.sel');
 		return (selEl) ? selEl.getAttribute('data-val') : null;
 	}
 
@@ -92,4 +92,9 @@ export class OptionsElement extends BaseFieldElement {
 	}
 	//#endregion ---------- /Lifecycle ---------- 
 
+}
+declare global {
+	interface HTMLElementTagNameMap {
+		'd-option': DOptionElement;
+	}
 }

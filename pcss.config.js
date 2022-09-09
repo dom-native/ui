@@ -1,12 +1,10 @@
 const prefixer = (await import('autoprefixer')).default;
 const importer = (await import('postcss-import')).default;
 const nested = (await import('postcss-nested')).default;
-const mixins = (await import('postcss-mixins')).default;
 
 const plugins = [
 	prefixer,
 	importer,
-	mixins,
 	nested
 ];
 

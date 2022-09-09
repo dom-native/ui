@@ -1,15 +1,21 @@
 
 **@dom-native/ui** is a minimalist set of base dom-native UI component based on DOM component (customElements) with a minimal style based on google material.
 
-[demo.dom-native.org/ui/](https://demo.dom-native.org/ui/index.html)
+[dom-native.org/ui/demo](https://dom-native.org/ui/demo#d-input)
 
+
+**IMPORTANT:** The current version is `v0.3.0-alpha.x` and you can install it with:
+  - `npm install @dom-native/ui@alpha`
+
+
+> Do not use `v0.2.x` version except if you have already built something with it (it is in maintenance mode and `v0.3.x` has an updated customization model)
 
 ## Approach
 
 - Based on **DOM native browser web component** support (.e.g., customElements)
   - i.e., NO virtual DOM, NO parallel component model, NO polyfill, just based on HTMLElement customElement base class. 
 - Use modern CSS (CSS Var, CSS Grid)
-- Default Google Material Style and Component Sets
+- Default [Google Material](https://m3.material.io/) Style and Component Sets
 - UI and CSS Designed to be highly stylable (UI states expressed in concise css class name, css driven layout)
 - Target only for modern browser: Chrome, Firefox, Safari, and Edge Chromium.
 
@@ -18,21 +24,21 @@
 ## Install
 
 - `npm install dom-native` (install the core dom-native library, DOM Centric MVC)
-- `npm install @dom-native/ui`
+- `npm install @dom-native/ui@alpha`
 - Add the `./node_module/ui/dist/css/all.css` in your html or css bundle.
 - Or if you use `pcss` you can do like
+
 ```css
-@import './node_module/ui/pcss/all.pcss'
+@import '@dom-native/ui/pcss/all.pcss';
 ````
 - Add the following in your main javascript file
 
 ```ts
 // load all ui components (as the constructors will be called by the browser)
-import '@dom-native/ui'; 
+import { loadDefaultIcons } from '@dom-native/ui';
 
-// Load default icon set as <svg><symbol></symbol></svg> doc in the html head. 
-import { defaultIcons } from '@dom-native/ui';
-defaultIcons.load();
+// load the default icons from @dom-native/ui
+loadDefaultIcons();
 ```
 
 
@@ -40,16 +46,11 @@ defaultIcons.load();
 
 - `d-input`
 - `d-check`
-- `d-select`
 - `d-ico`
-- `d-symbol`
 
 ## Future components
 
-- `d-popup`
-- `d-dialog`
-- `d-img`
-- `d-combo`
+- `d-select`
 
 
 

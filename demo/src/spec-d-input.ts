@@ -30,15 +30,15 @@ const spec_input_doc: CodeDoc = {
 				},
 				{
 					title: 'd-input Leading Icon and Trailing Label',
-					html: '<d-input ico-lead="d-ico-star" label-trail="Trail Label" label="Label" value="Value">\n</d-input>'
+					html: '<d-input icon-lead="d-ico-star" label-trail="Trail Label" label="Label" value="Value">\n</d-input>'
 				},
 				{
 					title: 'd-input Empty Leading Icon',
-					html: '<d-input ico-lead="d-ico-star" label="Label"></d-input>'
+					html: '<d-input icon-lead="d-ico-star" label="Label"></d-input>'
 				},
 				{
 					title: 'd-input Trailing Icon',
-					html: '<d-input ico-trail="d-ico-visible" label="Label" value="Value"></d-input>'
+					html: '<d-input icon-trail="d-ico-visible" label="Label" value="Value"></d-input>'
 				},
 				{
 					title: 'd-input placeholder',

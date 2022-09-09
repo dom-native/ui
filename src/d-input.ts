@@ -1,6 +1,14 @@
-import { customElement, elem, getAttr } from 'dom-native';
+import { adoptStyleSheets, css, customElement, elem, getAttr } from 'dom-native';
 import { BaseInputElement } from './d-base-input.js';
 
+const _base_input_css = css`
+	:host input, textarea {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		padding-left: 0;
+		padding-right: 0;		
+	}
+`;
 
 /**
  * d-input custom element encapsulate a label/input field group ()`d-input > label, input`) structure. 
@@ -21,27 +29,31 @@ import { BaseInputElement } from './d-base-input.js';
  * CSS:
  *   - See BaseFieldElement.
  * 
- * Content:
- *   - none
+ * Parts:
+ *   - label: The label element
+ * 	 - label-trail: The eventual label trail element
+ *   - text-trail: The eventual text trail element
+ *   - ctrl: The control element (the html input element in this case)
+ *   - icon-lead: The eventual icon lead element
+ * 	 - icon-trail: The eventual icond trail lelement
  * 
  * Events:
  *   - `CHANGE` see BaseFieldElement.
  * 
  */
 @customElement("d-input")
-export class InputElement extends BaseInputElement {
-	inputEl!: HTMLInputElement
+export class DInputElement extends BaseInputElement {
+	ctrlEl!: HTMLInputElement
 
 	static get observedAttributes() { return BaseInputElement.observedAttributes.concat(['password']) }
 
-	get value() { return this.inputEl.value };
+	get value() { return this.ctrlEl.value };
 	set value(val: any) { // today takes any, will get parsed by standard html input element .value
-		const inputEl = this.inputEl;
-		const old = inputEl.value;
+		const old = this.ctrlEl.value;
 
 		// set the value. Note that if the UI call this setter, will always be ===
 		if (val !== old) {
-			inputEl.value = val;
+			this.ctrlEl.value = val;
 		}
 
 		// get the value from input so that we use the html input parsing behavior
@@ -56,16 +68,19 @@ export class InputElement extends BaseInputElement {
 		this.triggerChange();
 	};
 
-	//#region    ---------- BaseInput Implementations ---------- 
-	createIptEl(): HTMLInputElement {
-		const type = this.hasAttribute('password') ? 'password' : 'text';
+	constructor() {
+		super();
+		adoptStyleSheets(this, [_base_input_css]);
+	}
 
-		//// Build the component HTML
-		const el = elem('input') as HTMLInputElement;
-		if (type != null) {
-			el.setAttribute('type', type);
-		}
-		return el;
+	init() {
+		super.init();
+	}
+
+	//#region    ---------- BaseInput Implementations ---------- 
+	createCtrlEl(): HTMLInputElement {
+		const type = this.hasAttribute('password') ? 'password' : 'text';
+		return elem('input', { type });
 	}
 
 	getInitialValue() {
@@ -74,4 +89,8 @@ export class InputElement extends BaseInputElement {
 	//#endregion ---------- /BaseInput Implementations ---------- 
 
 }
-
+declare global {
+	interface HTMLElementTagNameMap {
+		'd-input': DInputElement;
+	}
+}

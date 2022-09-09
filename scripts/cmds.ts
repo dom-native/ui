@@ -1,13 +1,15 @@
 import { router } from 'cmdrouter';
+import { execa } from 'execa';
 import { saferRemove } from 'fs-aux';
-import { spawn } from 'p-spawn';
-import { buildDemoCode } from './helpers.js';
-
 
 const SKETCH_PATH = '.design/ui-assets.sketch';
-// const SYMBOLS_TS_PATH = 'src/icons-default.ts'
+const SVG_SPRITE_PATH = '.design/svg/sprite.svg';
+const SYMBOLS_TS_PATH = 'src/icons-default.ts';
 
-router({ build, watch, site }).route();
+const { stdout, stderr } = process;
+const execaOpts = Object.freeze({ stdout, stderr });
+
+router({ build, watch }).route();
 
 async function build() {
 	await saferRemove('./dist');
@@ -16,62 +18,26 @@ async function build() {
 	// await sketch();
 
 	// build the dist/css/ui.css
-	await spawn('npm', ['run', 'build-css']);
+	await execa('./node_modules/.bin/pcss', execaOpts);
 
-	// build the tsc (vdev assume rollup on webBundles, which we do not need for this build)
-	await spawn('./node_modules/.bin/tsc');
+	// build the tsc (for the user imports)
+	console.log(`running './node_modules/.bin/tsc'`);
+	await execa('./node_modules/.bin/tsc', execaOpts);
+
+	// build the rollup to be part of the dist (for demo, deprecated now)
+	// await execa('./node_modules/.bin/rollup', ['-c'], execaOpts);
 }
 
 // FIXME - disabled since ESM update
 async function watch() {
-	await saferRemove('./demo/dist');
+	await saferRemove('./dist');
 
-	// generate first to have the ts able to compile
-	await buildDemoCode(false);
+	// NOTE - For v0.3.x we do not have demo here anymore, but in the @dom-native/site
+	//        So, just watching the css and ts
 
-	// TODO - re-enable the demo building
-	spawn('npm', ['run', 'build-demo-js', '--', '-w']);
-	spawn('npm', ['run', 'build-css', '--', '-w', '--verbose']);
+	execa('./node_modules/.bin/pcss', ['-w'], execaOpts);
+	console.log(`running './node_modules/.bin/tsc -w'`);
+	execa('./node_modules/.bin/tsc', ['-w'], execaOpts);
+	execa('./node_modules/.bin/sketchdev', ['-w'], execaOpts);
 
-	// // TODO sketch
-	buildDemoCode(true);
 }
-
-async function dev() {
-	watch();
-	spawn('npm', ['run', 'start']);
-}
-
-async function site() {
-	// await uploadSite('demo/', 'dom-native/demo/draggable/');
-	// TODO - call ss3
-}
-
-
-// async function sketch() {
-	
-// 	const outDir = '.design/out';
-// 	await saferRemove(outDir);
-// 	await mkdir(outDir);
-
-// 	const sketchDoc = await sketchdev(SKETCH_PATH);
-// 	const svgDir = outDir + '/svgs';
-// 	const spritePath = outDir + '/sprite.svg';
-// 	await sketchDoc.exportArtboards({
-// 		out: svgDir,
-// 		replace: [/\/\d.*$/, ''] as [RegExp, string],
-// 		artboardName: /^d-ico\/.*$/, // the regex matching artboard that should be exported
-// 		flatten: '-',
-// 		sprite: spritePath
-// 	});
-// 	const spriteContent = await readFile(spritePath, 'utf8');
-// 	const tsFileContent = await readFile(SYMBOLS_TS_PATH, 'utf8');
-
-// 	const regex = /const\sSVG_SYMBOLS\s=\s`([\s\S]*)`/;
-
-// 	const newTsFileContent = tsFileContent.replace(regex, `const SVG_SYMBOLS = \`\n${spriteContent}\n\``);
-
-// 	await writeFile(SYMBOLS_TS_PATH, newTsFileContent, 'utf8');
-// 	console.log(`Sketch file changed, ${SYMBOLS_TS_PATH} file updated`);
-
-// }

@@ -1,14 +1,29 @@
-import { BaseHTMLElement, customElement } from 'dom-native';
+import { BaseHTMLElement, customElement, html } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
+const { entries } = Object;
 
 /** Public api to generage a symbol svg reference */
-export function htmlSvgSymbol(name: string) {
-	var html = ['<svg class="symbol ' + name + '">'];
-	html.push('<use xlink:href="#' + name + '"></use>');
-	html.push('</svg>');
-	return html.join('\n');
+export function DEPRECATED_htmlSvgSymbol(name: string) {
+	return `<svg class="symbol ${name}">
+	<use xlink:href="#${name}"></use>
+</svg>`
 }
 
+
+export function svgSymbolEl(name: string, attrs?: { [k: string]: string }): Element {
+	const el = html`<svg class="symbol ${name}">
+  <use xlink:href="#${name}"></use>
+</svg>
+	`.firstElementChild!;
+
+	if (typeof attrs == 'object') {
+		for (const [k, v] of entries(attrs)) {
+			el.setAttribute(k, v);
+		}
+	}
+
+	return el;
+}
 
 
 //#region    ---------- d-symbol ---------- 
@@ -59,7 +74,7 @@ class SymbolElement extends BaseHTMLElement {
 		const name = this.name;
 		if (name) {
 			this.classList.add(name);
-			this.innerHTML = htmlSvgSymbol(name);
+			this.replaceChildren(svgSymbolEl(name));
 		}
 	}
 }

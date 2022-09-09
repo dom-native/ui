@@ -11,14 +11,15 @@ export default [{
 	output: {
 		file: './demo/dist/demo-bundle.js',
 		format: 'iife',
-		name: 'bundle'
+		name: 'bundle',
+		sourcemap: true
 	},
 	plugins: [
 		rollup_multi(),
 		rollup_cjs(),
 		rollup_re(),
 		rollup_ts({
-			tsconfig: './demo/tsconfig.json'
+			tsconfig: './demo/tsconfig.json',
 		})]
 }]
 

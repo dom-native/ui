@@ -1,7 +1,18 @@
-import { all, append, BaseHTMLElement, customElement, elem, first, getAttr, html, off, on, setAttr, style, trigger } from 'dom-native';
+import { BaseHTMLElement, customElement, elem, getAttr, html, on, onDoc, onEvent, onWin, setAttr, trigger } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
+import { BaseInputElement } from './d-base-input.js';
+import { svgSymbolEl } from './d-ico-symbol.js';
+import { position } from './position.js';
+
+const SHADOW_CONTENT = html`
+	<slot name="icon-lead"></slot>
+	<slot name="label"></slot>
+	<div class="box" part="box"></div>
+`;
 
 /**
+ * UNDER REFACTORIZATION DO NOT USE 
+ * 
  * d-select is a select component.
  *
  * Usage: `<d-select name="fieldA" value="0" popup-css="my-select-popup"><option value="0">Item 0</option></d-select>`
@@ -9,8 +20,6 @@ import { BaseFieldElement } from './d-base-field.js';
  * 
  * Attributes:
  *   - See BaseFieldElement.
- *   - `popup-css?` the css class text to be added to the `d-select-popup` for custom styling.
- *   - DEPRECATED AND REMOVED (FOR CSP) : `popup-style?` style text to be added to the `d-select-popup` after the set values (top/left/width)
  * 
  * Properties:
  *   - See BaseFieldElement.
@@ -33,261 +42,205 @@ export type SelectOption = { content: string, value: string | null };
 export type SelectDataSender = (options: SelectOption[]) => void;
 
 @customElement('d-select')
-export class SelectElement extends BaseFieldElement {
+export class DSelectElement extends BaseInputElement {
 
 	static get observedAttributes() { return BaseFieldElement.observedAttributes.concat(); }
 
-	labelEl: any;
+	// #region    --- Transitive Properties
+	get popupCss(): string | null { return getAttr(this, 'popup-css') }
+	// #endregion --- Transitive Properties
 
 	popupShowing = false;
-
-	//// Key Elements
-	iptEl!: HTMLElement;
+	popupEl: null | Element = null;
 
 	//// Properties
 	options: SelectOption[] = [];
 
 	//// Property (Value)
 	get value() {
-		return this.getAttribute('value');
+		return this.textContent;
 	}
 	set value(v: string | null) {
-		setAttr(this, 'value', v);
-		this.refresh();
+		if (v == null && this.placeholder) {
+			this.ctrlEl.part.add("placeholder");
+			this.ctrlEl.textContent = this.placeholder;
+		} else if (v != null) {
+			this.part.remove("placeholder");
+			this.ctrlEl.textContent = v;
+		}
 	}
 
-	get popupCss(): string | null { return getAttr(this, 'popup-css') }
-
-	//#region    ---------- Component Events ----------
+	// #region    --- Component Events
 	triggerData(sendData: SelectDataSender) {
 		trigger(this, 'D-DATA', { detail: sendData });
 	}
-	//#endregion ---------- /Component Events ---------- 
+	// #endregion --- Component Events
+
+	// #region    --- UI Events
+	@onEvent('pointerup')
+	onClick(evt: PointerEvent) {
+
+		if (!this.popupShowing && !this.disabled && !this.readonly) {
+
+			let popupEl = elem('d-select-popup', { class: this.popupCss ?? '' });
+			popupEl._setupData = [this, this.options];
+
+			// Append it to the body.
+			document.body.appendChild(popupEl);
+
+			// TODO - handle the focus logic
+			// this.classList.add('d-focus');
+			this.popupShowing = true;
+
+			// listen the popup if select occurs
+			on(popupEl, 'SELECT, CANCEL', (evt) => {
+				console.log('->> cancel',);
+				if (evt.type === 'SELECT') {
+					this.value = evt.detail.value;
+
+					this.triggerChange();
+					this.refresh();
+				} else {
+					// do nothing, assume the popup auto hide
+				}
+
+				// this.classList.remove('d-focus');
+				this.popupShowing = false;
+			});
+
+			// trigger a data event if a listener wants to provide data
+
+			// this.triggerData((options: SelectOption[]) => {
+			// 	this.options = options; // TODO: probably needs to have popup just asking select for options[]
+			// 	popup.options = options;
+			// });
+		}
+
+	}
+
+	// #endregion --- UI Events
 
 
-	//#region    ---------- Lifecycle ---------- 
+	constructor() {
+		super();
+		// add the popup component
+		this.shadowRoot!.appendChild(elem('slot', { name: 'popup' }));
+	}
 
+	// #region    --- Lifecycle
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init();
 
-
-		const [label, value] = getAttr(this, 'label', 'value');
-
-		//// create the appropriate this.options list from content HTML
-		const firstElement = this.firstElementChild;
-		let content: string | null = null;
-		// if we have options, then, we create the list
-		if (firstElement && firstElement.tagName === "OPTION") {
-			this.options = all(this, 'option').map(option => { return { content: option.innerHTML, value: option.getAttribute('value') } });
-		}
-		// if the content is not <option>, then, assume it shorthands for 
-		//   - placeholder (if no value)
-		//   - the content of the only option of the value (if value)
-		else {
-			content = (firstElement) ? firstElement.textContent : (this.firstChild) ? this.firstChild.textContent : null;
-			if (content) {
-				// if we have a value, then, create the single options with this value and content.
-				if (value != null) {
-					this.options.push({ value, content });
-				}
-				// otherwise, we set the place holder with the content
-				else {
-					this.placeholder = content;
-				}
-			}
-		}
-
-		//// Create Content
-		let tmp = html(`<label></label><div class="d-ipt"></div><d-ico class="chevron" name="d-ico-chevron-down"></d-ico><div class="d-box"></div>`);
-		let els = [...tmp.children];
-		[this.labelEl, this.iptEl] = [...tmp.children] as HTMLElement[];
-		this.labelEl.textContent = label;
-		this.innerHTML = ''; // to remove
-
-		// Add ico-lead if needed
-		const icoLead = this.icoLead;
-		if (icoLead) {
-			const icoEl = setAttr(elem('d-ico'), { 'name': icoLead, 'class': 'lead' });
-			append(tmp, icoEl, 'first');
-		}
-
-		this.appendChild(tmp);
-
-		//// Refresh the content
-		this.refresh();
-
-		//// Bind internal component events
-		on(this, 'click', (evt) => {
-
-			if (!this.popupShowing && !this.disabled && !this.readonly) {
-				const popupCss = this.popupCss;
-				const cssAttr = (popupCss) ? ` class="${popupCss}" ` : '';
-				let popupFrag = html(`<d-select-popup${cssAttr}></d-select-popup>`).firstElementChild as SelectPopupElement;
-
-				popupFrag._options = this.options;
-				popupFrag._select = this;
-
-				// Append it to the body.
-				// Note: SelectPopupElement constructor get called as it get appended to document)
-				const popup = first('body')!.appendChild(popupFrag);
-				this.classList.add('focused');
-				this.popupShowing = true;
-
-				// listen the popup if select occurs
-				on(popup, 'SELECT, CANCELED', (evt) => {
-					if (evt.type === 'SELECT') {
-						this.value = evt.detail.value;
-
-						this.triggerChange();
-						this.refresh();
-					} else {
-						// do nothing, assume the popup auto hide
-					}
-					this.classList.remove('focused');
-					this.popupShowing = false;
-				});
-
-				// trigger a data event if a listener wants to provide data
-
-				this.triggerData((options: SelectOption[]) => {
-					this.options = options; // TODO: probably needs to have popup just asking select for options[]
-					popup.options = options;
-				});
-			}
-
-		});
+		this.append(setAttr(svgSymbolEl('d-ico-chevron-down'), { slot: 'icon-trail' }));
+		this.classList.add('has-icon-trail');
+		console.log('->> d-select init',);
 	}
-	//#endregion ---------- /Lifecycle ---------- 
+	// #endregion --- Lifecycle
 
 	refresh() {
-		const val = this.value;
-		this.noValue = (val == null || val === '');
 
-		if (this.noValue) {
-			let text: string | null | undefined = this.placeholder;
-			if (text) {
-				this.iptEl.innerHTML = text;
-			} else {
-				this.iptEl.innerHTML = '';
-			}
-		} else {
-			const option = this.options.find(o => (o.value === val));
-			if ((option == null || option.value == null) && this.placeholder != null) {
-				this.iptEl.textContent = this.placeholder;
-			} else if (option) {
-				this.iptEl.innerHTML = option.content;
-			}
-		}
+	}
 
+	// #region    --- BaseInput Implementations
+	createCtrlEl(): HTMLElement {
+		return elem('div');
+	}
 
-
-
+	getInitialValue() {
+		return getAttr(this, 'value');
+	}
+	// #endregion --- BaseInput Implementations
+}
+declare global {
+	interface HTMLElementTagNameMap {
+		'd-select': DSelectElement;
 	}
 }
 
 
+// #region    --- SelectPopupElement
 
+const SELECT_POPUP_POSITION = Object.freeze({ loc: 'bottom', align: 'left' } as const);
 
-//#region    ---------- SelectPopupElement ---------- 
 /**
  * Component to be used only by the SelectElement (for now).
  * Events: 
  * 	- `SELECT` when an item is selected
- * 	- `CANCELED` when the user click outside
+ * 	- `CANCEL` when the user click outside
  */
 @customElement('d-select-popup')
 class SelectPopupElement extends BaseHTMLElement {
-	_options!: SelectOption[];
-	_select!: SelectElement;
+	_setupData!: [DSelectElement, SelectOption[]?];
 
-	//// Properties
-	get options() { return this._options };
-	set options(val: SelectOption[]) {
-		this._options = val;
-		if (this.initialized) {
-			this.render();
-		}
+	previousSelectElRect?: DOMRect;
+
+	get selectEl(): DSelectElement { return this._setupData[0] }
+
+	get selectOptions(): SelectOption[] | undefined { return this._setupData[1] }
+
+	// #region    --- UI Events
+	@onDoc('scroll', { capture: true })
+	removeOnScroll(evt: Event) {
+		// TODO: Add some padding to not close on small scrolls, or prevent scroll all together (making it modal)
+		this.discard(true);
 	}
 
-	//#region    ---------- Lifecycle ---------- 
+	@onWin('resize', { capture: true, passive: true })
+	onRepositionEvents(evt: Event) {
+		this.reposition();
+	}
+
+	// Auto remove when click outide of parent 
+	// (click on parent, d-select, will be responsibility of d-select)
+	@onDoc('pointerup')
+	onDocClick(evt: PointerEvent) {
+		if (!this.selectEl.contains(evt.target as Element) && !this.contains(evt.target as Element)) {
+			this.discard(true);
+		}
+	}
+	// #endregion --- UI Events
+
+	// #region    --- Lifecycle
 	init() {
-		super.init();
-
-		this.render();
-
-		// events
-		on(this, 'click', 'li', (evt) => {
-			const li = evt.selectTarget;
-			const value = getAttr(li, 'data-val');
-			trigger(this, 'SELECT', { detail: { value } })
-			this.remove();
-		});
-
-		// TRICK: put on a timeout to get the event only after display, otherwise we get the click even when the 
-		//        user click on the d-select. 
-		//        TODO: might need to find a more elegant way.
-		// IMPORTANT: MUST be unbound in the disconnectedCallback
-		// setTimeout(() => {
-		// 	on(document, 'click', (evt) => {
-		// 		// TODO 
-		// 		const target = evt.target as HTMLElement;
-		// 		if (target.closest('d-select-popup') !== this) {
-		// 			this.remove();
-		// 			trigger(this, 'CANCELED');
-		// 		}
-
-		// 	}, { ns: this.uid });
-
-		// }, 10)
-
+		this.reposition();
 	}
+	// #endregion --- Lifecycle
 
-	// IMPORTANT: unregister parent DOM event bindings in the disconnectedCallback
-	disconnectedCallback() {
-		super.disconnectedCallback(); // ALWAYS
-		off(document, { ns: this.uid });
-	}
 
-	preDisplay() {
-		// position the popup
-		const emRect = this._select.getBoundingClientRect();
-		const currentStyle = this.style;
-
-		// Note: here we use || and not ?? because empty string is non defined
-		const newStyle = {
-			top: currentStyle.top || window.scrollY + emRect.top + emRect.height + 4 + 'px',
-			left: currentStyle.left || window.scrollX + emRect.left + 'px',
-			width: currentStyle.width || emRect.width + 'px'
+	discard(cancel: boolean) {
+		this.remove();
+		if (cancel) {
+			trigger(this, 'CANCEL');
 		}
-		style(this, newStyle);
 	}
 
-	postDisplay() {
-		// Do the binding on postDisplay to avoid getting first click. 
-		on(document, 'click', (evt) => {
-			// TODO 
-			const target = evt.target as HTMLElement;
-			if (target.closest('d-select-popup') !== this) {
-				this.remove();
-				trigger(this, 'CANCELED');
-			}
-		}, { ns: this.uid });
-	}
-	//#region ---------- /Lifecycle ---------- 
 
-
-	render() {
-		const selectVal = this._select.value;
-		let html = `\n<ul>`;
-		for (const item of this._options) {
-			const attrCss = (item.value === selectVal) ? 'class="sel"' : '';
-			const attrVal = (item.value) ? `data-val="${item.value}"` : '';
-			html += `\n  <li ${attrVal} ${attrCss}>${item.content}</li>`;
+	reposition() {
+		const parentRect = this.selectEl.getBoundingClientRect();
+		if (parentRect != null && !isSameRect(parentRect, this.previousSelectElRect)) {
+			position(this, { ref: this.selectEl, to: SELECT_POPUP_POSITION, width: true });
 		}
-		html += `\n</ul>`;
-		this.innerHTML = html;
+		this.previousSelectElRect = parentRect;
 	}
+
 
 }
-//#endregion ---------- /SelectPopupElement ----------
+
+// Augment the global TagName space to match runtime
+declare global {
+	interface HTMLElementTagNameMap {
+		'd-select-popup': SelectPopupElement;
+	}
+}
+
+
+function isSameRect(a: DOMRect, b?: DOMRect): boolean {
+	if (b == null) return false;
+	return (a.top == b.top && a.left == b.left && a.right == b.right && a.bottom == b.bottom);
+}
+
+
+// #endregion --- SelectPopupElement
+
+

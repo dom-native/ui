@@ -1,7 +1,15 @@
-import { append, elem, getAttr, on, setAttr } from 'dom-native';
+import { elem, getAttr, html, on, setAttr } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
-import { css } from './utils.js';
+import { svgSymbolEl } from './d-ico-symbol.js';
 
+const SHADOW_CONTENT = html`
+	<slot name="icon-lead"></slot>
+	<slot name="icon-trail"></slot>		
+	<slot name="label"></slot>
+	<slot name="label-trail"></slot>
+	<slot name="text-trail"></slot>	
+	<div class="box" part="box"></div>
+`;
 
 /**
  * Base field element for d-input and d-text (text area)
@@ -26,105 +34,106 @@ import { css } from './utils.js';
  */
 export abstract class BaseInputElement extends BaseFieldElement {
 
+	// --- Component Key Children (on demand for more DOM mutation resiliency)
+	protected ctrlEl!: HTMLElement | HTMLInputElement | HTMLTextAreaElement;
+	protected labelEl!: HTMLElement | null;
+	protected labelTrailEl?: HTMLElement;
 
-	//// Component Key Children (on demand for more DOM mutation resiliency)
-	inputEl!: HTMLInputElement | HTMLTextAreaElement;
-	labelEl!: HTMLElement | null;
-	labelTrailEl?: HTMLElement;
-
-	//// Properties (CSS Reflective)
-	get focused(): boolean { return this.classList.contains('focused') };
-	set focused(b: boolean) { css(this, { focused: b }) };
-
-	//// Input value are always text
-	abstract get value(): string | null
+	// --- Input value are always text
+	abstract get value(): string | null;
 	abstract set value(val: string | null)
+
+	constructor() {
+		super();
+
+		// Base shadow content
+		const content = SHADOW_CONTENT.cloneNode(true);
+
+		// Add the input control to the shadow dom
+		this.ctrlEl = this.createCtrlEl();
+		setAttr(this.ctrlEl, { part: 'ctrl' });
+		this.ctrlEl.classList.add('ctrl');
+		content.appendChild(this.ctrlEl);
+
+		// Forward d-input attributes to HTMLInputElement ctrl element
+		const [readonly, disabled, placeholder] = getAttr(this, 'readonly', 'disabled', 'placeholder');
+		if (isValueElement(this.ctrlEl)) {
+			setAttr(this.ctrlEl, { readonly, disabled, placeholder });
+		}
+
+		// Build the shadow and append
+		const shadow = this.attachShadow({ mode: 'open' });
+		shadow.append(content);
+	}
 
 	//#region    ---------- Lifecycle ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init();
 
-		//// Build the component HTML
-		const content = document.createDocumentFragment();
-
-		// Add ico-lead if needed
-		const icoLead = this.icoLead;
+		// --- Add icon-lead if needed
+		const icoLead = this.iconLead;
 		if (icoLead) {
-			const icoEl = setAttr(elem('d-ico'), { 'name': icoLead, 'class': 'lead' });
-			content.appendChild(icoEl);
+			this.classList.add("has-icon-lead");
+			this.appendChild(svgSymbolEl(icoLead, { slot: "icon-lead" }));
 		}
 
-		// add the input
-		this.inputEl = this.createIptEl();
-		this.inputEl.classList.add('d-ipt');
-		content.appendChild(this.inputEl);
+		// --- Add the icon-trail if needed
+		const icoTrail = this.iconTrail;
+		if (icoTrail) {
+			this.classList.add("has-icon-trail");
+			this.appendChild(svgSymbolEl(icoTrail, { slot: "icon-trail" }));
+		}
 
 		const [label, labelTrail, textTrail] = getAttr(this, 'label', 'label-trail', 'text-trail');
 
-		// add the label
-		if (label) {
-			this.labelEl = elem('label');
-			this.labelEl.textContent = label;
-			content.appendChild(this.labelEl);
-		}
-
 		// add the label-trail
 		if (labelTrail) {
-			const labelTrailEl = setAttr(elem('label'), { 'class': 'label-trail' });
-			labelTrailEl.textContent = labelTrail;
-			content.appendChild(labelTrailEl);
+			this.appendChild(elem('label', { slot: 'label-trail', $: { textContent: labelTrail } }));
+		}
+
+		// add the label
+		if (label) {
+			this.appendChild(elem('label', { slot: 'label', $: { textContent: label } }));
 		}
 
 		// add the text-trail 
 		if (textTrail) {
-			const textTrailEl = setAttr(elem('div'), { 'class': 'text-trail' });
-			textTrailEl.textContent = textTrail;
-			content.appendChild(textTrailEl);
+			this.classList.add("has-text-trail");
+			this.appendChild(elem('div', { slot: 'text-trail', $: { textContent: textTrail } }));
 		}
 
-		// Add the ico-trail if needed
-		const icoTrail = this.icoTrail;
-		if (icoTrail) {
-			const icoEl = setAttr(elem('d-ico'), { 'name': icoTrail, 'class': 'trail' });
-			content.appendChild(icoEl);
-		}
-
-		content.appendChild(setAttr(elem('div'), { class: 'd-box' }));
-
-		// get the attribute from this d-input to be copied to the input child
-		const [readonly, disabled, placeholder] = getAttr(this, 'readonly', 'disabled', 'placeholder');
-		setAttr(this.inputEl, { readonly, disabled, placeholder });
-
+		// --- Set the states
 		const value = this.getInitialValue();
+		this.noValue = (!value);
 		this.value = value;
 
-		append(this, content, 'empty');
-
-		//// Set the states
-		this.noValue = (!value);
-
-		//// Bind internal component events
-		on(this, 'focusin, focusout, change', '.d-ipt', (evt) => {
+		// --- Bind internal component events
+		on(this.ctrlEl, 'change, focusin, focusout', (evt) => {
 			const m_input = this;
 
 			switch (evt.type) {
 				case 'focusin':
-					m_input.focused = true;
+					this.dFocus = true;
 					break;
 				case 'focusout':
-					m_input.focused = false;
+					this.dFocus = false;
 					break;
 				case 'change':
 					// here we forward the value from the input to this component state value to make srue all get changed.
-					this.value = this.inputEl.value;
+					if (isValueElement(this.ctrlEl)) {
+						this.value = this.ctrlEl.value;
+					} else {
+						this.value = this.textContent;
+					}
+
 					break;
 			}
 		});
 
 		// TODO: minor bug when user re-click on label when input is empty, it toggle focus off. 
-		on(this, 'click', 'label', (evt) => {
-			this.inputEl.focus();
+		on(this.shadowRoot, 'click', 'label', (evt) => {
+			this.ctrlEl.focus();
 		});
 	}
 
@@ -134,13 +143,22 @@ export abstract class BaseInputElement extends BaseFieldElement {
 		if (this.initialized) {
 			switch (name) {
 				case 'readonly':
-					setAttr(this.inputEl, { readonly: newVal });
+					if (isValueElement(this.ctrlEl)) {
+						setAttr(this.ctrlEl, { readonly: newVal });
+					}
 					break;
 				case 'disabled':
-					setAttr(this.inputEl, { disabled: newVal });
+					if (isValueElement(this.ctrlEl)) {
+						setAttr(this.ctrlEl, { disabled: newVal });
+					}
 					break;
 				case 'placeholder':
-					setAttr(this.inputEl, { placeholder: newVal });
+					if (isValueElement(this.ctrlEl)) {
+						setAttr(this.ctrlEl, { placeholder: newVal });
+					} else {
+						// TODO - check if 
+						this.value = this.value;
+					}
 					break;
 			}
 		}
@@ -150,11 +168,14 @@ export abstract class BaseInputElement extends BaseFieldElement {
 
 	//#region    ---------- HTML Element Overrides ---------- 
 	focus() {
-		this.inputEl?.focus();
+		this.ctrlEl?.focus();
 	}
 	//#endregion ---------- /HTML Element Overrides ----------
 
-	abstract createIptEl(): HTMLInputElement | HTMLTextAreaElement
+	abstract createCtrlEl(): HTMLElement | HTMLInputElement | HTMLTextAreaElement
 	abstract getInitialValue(): string | null
 }
 
+export function isValueElement(obj: HTMLElement | HTMLInputElement | HTMLTextAreaElement): obj is HTMLInputElement | HTMLTextAreaElement {
+	return (obj instanceof HTMLInputElement || obj instanceof HTMLTextAreaElement);
+}

@@ -1,11 +1,12 @@
-export { BaseFieldElement } from './d-base-field';
-export { CheckElement } from './d-check';
-export { InputElement } from './d-input';
-export { OptionsElement } from './d-options';
-export { RadioElement } from './d-radio';
-export { SelectDataSender, SelectElement, SelectOption } from './d-select';
-export { TextElement } from './d-text';
-export { symbols as defaultIcons } from "./icons-default";
+export { BaseFieldElement } from './d-base-field.js';
+export { DCheckElement } from './d-check.js';
+export { DInputElement } from './d-input.js';
+export { DOptionElement } from './d-options.js';
+export { DRadioElement } from './d-radio.js';
+export { DSelectElement, SelectDataSender, SelectOption } from './d-select.js';
+export { DTextareaElement } from './d-textarea.js';
+export { position, PositionOptions } from './position.js';
+export { loadDefaultIcons, loadSvgSymbols } from './svg-icons-loader.js';
 
 
 

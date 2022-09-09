@@ -1,6 +1,7 @@
 import { customElement } from 'dom-native';
-import { htmlSvgSymbol } from './d-ico-symbol.js';
+import { svgSymbolEl } from './d-ico-symbol.js';
 import { BaseToggleElement } from './d-toggle.js';
+
 
 /**
  * d-check custom element encapsulate a checkbox true/false component with or without label concept.
@@ -31,19 +32,21 @@ import { BaseToggleElement } from './d-toggle.js';
  */
 
 @customElement("d-check")
-export class CheckElement extends BaseToggleElement {
+export class DCheckElement extends BaseToggleElement {
 
 	//#region    ---------- base-toggle implementations ---------- 
 	handleClick(): void {
 		this.checked = !this.checked;
 	}
 
-	renderIptContent(): string | undefined {
-		if (!this.iptEl) {
-			return htmlSvgSymbol('d-ico-check');
-		} else {
-			return undefined; // no need to update for checkbox if iptEl has been already initialized
-		}
+	renderVisualEl(): Element {
+		const icoName = (this.checked) ? 'd-ico-check-on' : 'd-ico-check-off';
+		return svgSymbolEl(icoName, { slot: 'visual' });
 	}
 	//#region    ---------- /base-toggle implementations ---------- 
+}
+declare global {
+	interface HTMLElementTagNameMap {
+		'd-check': DCheckElement;
+	}
 }
