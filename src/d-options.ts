@@ -1,4 +1,4 @@
-import { all, attr, customElement, first, getAttr, on } from 'dom-native';
+import { all, customElement, first, getAttr, on } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 
 /**

@@ -21,16 +21,4 @@ export default [{
 
 	// postcss processor arrays
 	plugins
-},
-{
-	input: ['demo/pcss/main.pcss'],
-
-	// required. single css file supported for now. 
-	output: 'demo/dist/demo-bundle.css',
-
-	watchPath: ['./**/*.pcss'],
-
-	// postcss processor arrays
-	plugins
-}
-]
+}]
