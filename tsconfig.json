@@ -22,15 +22,12 @@
 
 		"noImplicitAny": true,
 
-		"noEmitHelpers": true,
+		// "noEmitHelpers": true,
 
 		// Definitely wants sourcemapp
 		"sourceMap": true, /* Generates corresponding '.map' file. */
 
 		"outDir": "./dist/", /* Redirect output structure to the directory. */
-
-		
-		"experimentalDecorators": true,
 
 		// Needed to call import default (replaces allowSyntheticDefaultImports)
 		"esModuleInterop": true

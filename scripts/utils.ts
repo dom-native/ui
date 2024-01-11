@@ -2,7 +2,7 @@ import * as Path from 'path';
 
 
 export async function wait(ms: number) {
-	return new Promise(function (resolve) {
+	return new Promise(function (resolve: any) {
 		setTimeout(() => { resolve(); }, ms);
 	});
 }

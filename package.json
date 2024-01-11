@@ -1,7 +1,7 @@
 {
   "name": "@dom-native/ui",
   "type": "module",
-  "version": "0.3.0-alpha.1",
+  "version": "0.3.0-alpha.2",
   "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
   "main": "dist/index.js",
   "scripts": {
@@ -13,27 +13,27 @@
     "site": "ss3 cp demo/ jc-sites:dom-native/demo/ui/"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^22.0.2",
-    "@rollup/plugin-multi-entry": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^14.1.0",
-    "@types/js-yaml": "^4.0.5",
-    "@types/lodash.debounce": "^4.0.7",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-multi-entry": "^6.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@types/js-yaml": "^4.0.9",
+    "@types/lodash.debounce": "^4.0.9",
     "chokidar": "^3.5.3",
     "cmdrouter": "^0.3.1",
-    "dom-native": "^0.11.1",
-    "execa": "^6.1.0",
+    "dom-native": "^0.12.0-alpha.1",
+    "execa": "^8.0.1",
     "fs-aux": "^0.1.1",
     "js-yaml": "^4.1.0",
     "lodash.debounce": "^4.0.8",
-    "pcss-cli": "^0.2.7",
-    "rollup": "^2.79.0",
-    "rollup-plugin-typescript2": "^0.34.0",
+    "pcss-cli": "^0.2.9",
+    "rollup": "^4.9.4",
+    "rollup-plugin-typescript2": "^0.36.0",
     "sketchdev": "^0.7.4",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.8.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "files": [
     "src/",
