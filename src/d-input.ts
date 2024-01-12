@@ -43,7 +43,7 @@ const _base_input_css = css`
  */
 @customElement("d-input")
 export class DInputElement extends BaseInputElement {
-	ctrlEl!: HTMLInputElement
+	declare ctrlEl: HTMLInputElement
 
 	static get observedAttributes() { return BaseInputElement.observedAttributes.concat(['password']) }
 

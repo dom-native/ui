@@ -3,13 +3,6 @@ import { BaseFieldElement } from './d-base-field.js';
 const { entries } = Object;
 
 /** Public api to generage a symbol svg reference */
-export function DEPRECATED_htmlSvgSymbol(name: string) {
-	return `<svg class="symbol ${name}">
-	<use xlink:href="#${name}"></use>
-</svg>`
-}
-
-
 export function svgSymbolEl(name: string, attrs?: { [k: string]: string }): Element {
 	const el = html`<svg class="symbol ${name}">
   <use xlink:href="#${name}"></use>
@@ -92,17 +85,17 @@ class SymbolElement extends BaseHTMLElement {
  *   -  name?: 
  * 
  * 
- * Content:
- *   - icon name with the prefix. To configure prefix set, like IcoElement.prefix = 'ico-' in your initializing application script
- * 
  * Properties: none
  * 
  */
 @customElement('d-ico')
 export class IcoElement extends SymbolElement {
-	static prefix = '';
+	// NOTE: Unfortunately, TS 5.x decorator seems to remove support for static intialization
+	//       e.g., when doing a IcoElement.prefix in the get name() we get undefined. 
+	//       So, disabling feature for now. TS 5.x decorator more important than static initialization.
+	// static prefix = '';
 
-	get name() { return IcoElement.prefix + super.name }
+	get name() { return super.name }
 
 }
 //#endregion ---------- /d-ico ----------

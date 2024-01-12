@@ -22,9 +22,12 @@
 
 		"noImplicitAny": true,
 
-		// "noEmitHelpers": true,
+		"noEmitHelpers": true,
 
-		// Definitely wants sourcemapp
+		// Use native class fields
+		"useDefineForClassFields": true,
+
+		// Definitely wants sourcemap
 		"sourceMap": true, /* Generates corresponding '.map' file. */
 
 		"outDir": "./dist/", /* Redirect output structure to the directory. */

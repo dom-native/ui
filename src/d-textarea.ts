@@ -29,7 +29,7 @@ import { BaseInputElement } from './d-base-input.js';
  */
 @customElement("d-textarea")
 export class DTextareaElement extends BaseInputElement {
-	ctrlEl!: HTMLTextAreaElement
+	declare ctrlEl: HTMLTextAreaElement
 
 	//// Property (Value)
 	get value() { return this.ctrlEl.value };
