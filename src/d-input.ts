@@ -47,7 +47,9 @@ export class DInputElement extends BaseInputElement {
 
 	static get observedAttributes() { return BaseInputElement.observedAttributes.concat(['password']) }
 
-	get value() { return this.ctrlEl.value };
+	get value() {
+		return this.ctrlEl.value;
+	};
 	set value(val: any) { // today takes any, will get parsed by standard html input element .value
 		const old = this.ctrlEl.value;
 

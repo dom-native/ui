@@ -1,4 +1,4 @@
-import { BaseHTMLElement, customElement, elem, getAttr, html, on, onDoc, onEvent, onWin, setAttr, trigger } from 'dom-native';
+import { BaseHTMLElement, OnEvent, all, customElement, elem, frag, getAttr, html, on, onDoc, onEvent, onWin, setAttr, trigger } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 import { BaseInputElement } from './d-base-input.js';
 import { svgSymbolEl } from './d-ico-symbol.js';
@@ -54,18 +54,18 @@ export class DSelectElement extends BaseInputElement {
 	popupEl: null | Element = null;
 
 	//// Properties
-	options: SelectOption[] = [];
+	// options: SelectOption[] = [];
 
 	//// Property (Value)
 	get value() {
-		return this.textContent;
+		return this.ctrlEl.textContent;
 	}
 	set value(v: string | null) {
 		if (v == null && this.placeholder) {
 			this.ctrlEl.part.add("placeholder");
 			this.ctrlEl.textContent = this.placeholder;
 		} else if (v != null) {
-			this.part.remove("placeholder");
+			this.ctrlEl.part.remove("placeholder");
 			this.ctrlEl.textContent = v;
 		}
 	}
@@ -82,8 +82,9 @@ export class DSelectElement extends BaseInputElement {
 
 		if (!this.popupShowing && !this.disabled && !this.readonly) {
 
+			let options = all(this, "option").map((el) => { return { content: el.innerHTML, value: getAttr(el, "value") } })
 			let popupEl = elem('d-select-popup', { class: this.popupCss ?? '' });
-			popupEl._setupData = [this, this.options];
+			popupEl._setupData = [this, options];
 
 			// Append it to the body.
 			document.body.appendChild(popupEl);
@@ -94,7 +95,6 @@ export class DSelectElement extends BaseInputElement {
 
 			// listen the popup if select occurs
 			on(popupEl, 'SELECT, CANCEL', (evt) => {
-				console.log('->> cancel',);
 				if (evt.type === 'SELECT') {
 					this.value = evt.detail.value;
 
@@ -134,7 +134,6 @@ export class DSelectElement extends BaseInputElement {
 
 		this.append(setAttr(svgSymbolEl('d-ico-chevron-down'), { slot: 'icon-trail' }));
 		this.classList.add('has-icon-trail');
-		console.log('->> d-select init',);
 	}
 	// #endregion --- Lifecycle
 
@@ -163,6 +162,7 @@ declare global {
 
 const SELECT_POPUP_POSITION = Object.freeze({ loc: 'bottom', align: 'left' } as const);
 
+interface WithData { _data: any }
 /**
  * Component to be used only by the SelectElement (for now).
  * Events: 
@@ -180,6 +180,15 @@ class SelectPopupElement extends BaseHTMLElement {
 	get selectOptions(): SelectOption[] | undefined { return this._setupData[1] }
 
 	// #region    --- UI Events
+	@onEvent('pointerup', '.option')
+	onClickOption(evt: Event & OnEvent) {
+		let target = (<any>evt.selectTarget) as WithData;
+		let option = target._data;
+		let selectEl = this._setupData?.[0];
+		trigger(this, "SELECT", { detail: option });
+		this.discard(false);
+	}
+
 	@onDoc('scroll', { capture: true })
 	removeOnScroll(evt: Event) {
 		// TODO: Add some padding to not close on small scrolls, or prevent scroll all together (making it modal)
@@ -202,9 +211,24 @@ class SelectPopupElement extends BaseHTMLElement {
 	// #endregion --- UI Events
 
 	// #region    --- Lifecycle
+
 	init() {
+		let options = this._setupData?.[1];
+		if (options != null) {
+			let content = frag(options, (o) => elem("div", {
+				class: "option",
+				value: o.value || "",
+				$: {
+					textContent: o.content,
+					_data: o
+				}
+			}))
+			this.replaceChildren(content);
+		}
 		this.reposition();
 	}
+
+
 	// #endregion --- Lifecycle
 
 

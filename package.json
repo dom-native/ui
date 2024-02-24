@@ -16,6 +16,9 @@
   "dependencies": {
     "tslib": "^2.6.2"
   },
+  "peerDependencies": {
+    "dom-native": "file:../dom-native_src"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-multi-entry": "^6.0.1",
@@ -24,7 +27,6 @@
     "@types/lodash.debounce": "^4.0.9",
     "chokidar": "^3.5.3",
     "cmdrouter": "^0.3.1",
-    "dom-native": "^0.12.0-alpha.1",
     "execa": "^8.0.1",
     "fs-aux": "^0.1.1",
     "js-yaml": "^4.1.0",
