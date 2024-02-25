@@ -49,10 +49,15 @@ export abstract class BaseInputElement extends BaseFieldElement {
 		// Base shadow content
 		const content = SHADOW_CONTENT.cloneNode(true);
 
-		// Add the input control to the shadow dom
-		this.ctrlEl = this.createCtrlEl();
-		setAttr(this.ctrlEl, { part: 'ctrl' });
-		this.ctrlEl.classList.add('ctrl');
+		// -- Add the input control to the shadow dom
+		const ctrlEl = this.createCtrlEl();
+		setAttr(ctrlEl, { part: 'ctrl' });
+		ctrlEl.classList.add('ctrl');
+		// Carry over the attributes
+		let [spellcheck, autocorrect, autocomplete] = getAttr(ctrlEl, "spellcheck", "autocorrect", "autocomplete")
+		setAttr(ctrlEl, { spellcheck, autocorrect, autocomplete });
+		this.ctrlEl = ctrlEl;
+
 		content.appendChild(this.ctrlEl);
 
 		// Forward d-input attributes to HTMLInputElement ctrl element

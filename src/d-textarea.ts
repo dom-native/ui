@@ -57,7 +57,7 @@ export class DTextareaElement extends BaseInputElement {
 
 	//#region    ---------- BaseInput Implementations ---------- 
 	createCtrlEl(): HTMLTextAreaElement {
-		//// Build the component HTML
+		// Build the component HTML
 		return elem('textarea');
 	}
 
