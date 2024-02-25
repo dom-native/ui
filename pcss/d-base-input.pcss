@@ -178,7 +178,7 @@ d-textarea [slot="icon-trail"] {
 d-textarea::part(ctrl) {
   grid-column: 2 / 4;
   padding-top: .75rem;
-  resize: vertical;
+  resize: none;
 }
 
 /* #endregion d-textarea specific */
@@ -222,8 +222,6 @@ d-select-popup {
   background: var(--d-field-bkg);
   box-shadow: var(--d-elev-03-shadow);
   border-radius: 5px;
-
-  padding: 1rem 0;
 
   .option {
     cursor: pointer;

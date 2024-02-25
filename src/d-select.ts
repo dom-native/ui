@@ -53,12 +53,14 @@ export class DSelectElement extends BaseInputElement {
 	popupShowing = false;
 	popupEl: null | Element = null;
 
+	#value: any;
+
 	//// Properties
 	// options: SelectOption[] = [];
 
 	//// Property (Value)
 	get value() {
-		return this.ctrlEl.textContent;
+		return this.#value;
 	}
 	set value(v: string | null) {
 		if (v == null && this.placeholder) {
@@ -68,6 +70,8 @@ export class DSelectElement extends BaseInputElement {
 			this.ctrlEl.part.remove("placeholder");
 			this.ctrlEl.textContent = v;
 		}
+
+		this.#value = v;
 	}
 
 	// #region    --- Component Events

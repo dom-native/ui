@@ -33,7 +33,10 @@
 		"outDir": "./dist/", /* Redirect output structure to the directory. */
 
 		// Needed to call import default (replaces allowSyntheticDefaultImports)
-		"esModuleInterop": true
+		"esModuleInterop": true,
+
+		// Still use TS4 decorators (TS5 not supported by bun, and require class shim on all runtime)
+		"experimentalDecorators": true,
 	},
 
 	// We want more control about which code we will compile and exclude

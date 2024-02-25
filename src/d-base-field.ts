@@ -153,6 +153,7 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 
 }
 
+
 //#region    ---------- Register mvdom dx ---------- 
 pusher('.d-field', function (this: BaseFieldElement, val: any) {
 	this.value = val;
