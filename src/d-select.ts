@@ -50,8 +50,7 @@ export class DSelectElement extends BaseInputElement {
 	get popupCss(): string | null { return getAttr(this, 'popup-css') }
 	// #endregion --- Transitive Properties
 
-	popupShowing = false;
-	popupEl: null | Element = null;
+	#popupEl: SelectPopupElement | null = null;
 
 	#value: any;
 
@@ -76,7 +75,7 @@ export class DSelectElement extends BaseInputElement {
 
 	// #region    --- Component Events
 	triggerData(sendData: SelectDataSender) {
-		trigger(this, 'D-DATA', { detail: sendData });
+		trigger(this, 'D-DATA', { detail: { sendData } });
 	}
 	// #endregion --- Component Events
 
@@ -84,7 +83,7 @@ export class DSelectElement extends BaseInputElement {
 	@onEvent('pointerup')
 	onClick(evt: PointerEvent) {
 
-		if (!this.popupShowing && !this.disabled && !this.readonly) {
+		if (!this.#popupEl && !this.disabled && !this.readonly) {
 
 			let options = all(this, "option").map((el) => { return { content: el.innerHTML, value: getAttr(el, "value") } })
 			let popupEl = elem('d-select-popup', { class: this.popupCss ?? '' });
@@ -95,7 +94,7 @@ export class DSelectElement extends BaseInputElement {
 
 			// TODO - handle the focus logic
 			// this.classList.add('d-focus');
-			this.popupShowing = true;
+			this.#popupEl = popupEl;
 
 			// listen the popup if select occurs
 			on(popupEl, 'SELECT, CANCEL', (evt) => {
@@ -109,15 +108,18 @@ export class DSelectElement extends BaseInputElement {
 				}
 
 				// this.classList.remove('d-focus');
-				this.popupShowing = false;
+				this.#popupEl = null;
 			});
 
 			// trigger a data event if a listener wants to provide data
-
-			// this.triggerData((options: SelectOption[]) => {
-			// 	this.options = options; // TODO: probably needs to have popup just asking select for options[]
-			// 	popup.options = options;
-			// });
+			this.triggerData((options: SelectOption[]) => {
+				this.#popupEl?.refreshOptions(options);
+			});
+		}
+		// We discard/cancel the popup
+		else if (this.#popupEl) {
+			this.#popupEl.discard(true);
+			this.#popupEl = null;
 		}
 
 	}
@@ -217,7 +219,14 @@ class SelectPopupElement extends BaseHTMLElement {
 	// #region    --- Lifecycle
 
 	init() {
-		let options = this._setupData?.[1];
+		this.refreshOptions();
+	}
+
+
+	// #endregion --- Lifecycle
+
+	refreshOptions(options?: SelectOption[]) {
+		options = options ?? this._setupData?.[1];
 		if (options != null) {
 			let content = frag(options, (o) => elem("div", {
 				class: "option",
@@ -231,9 +240,6 @@ class SelectPopupElement extends BaseHTMLElement {
 		}
 		this.reposition();
 	}
-
-
-	// #endregion --- Lifecycle
 
 
 	discard(cancel: boolean) {
