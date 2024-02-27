@@ -1,5 +1,5 @@
-
-d-check, d-radio {
+d-check,
+d-radio {
   display: grid;
   grid-template-columns: 1.5rem 0.5rem 1fr;
   grid-template-rows: 1.5rem;
@@ -43,23 +43,22 @@ d-check, d-radio {
     /* vertical center */
   }
 
-    &:focus {
-      outline: none;
+  &:focus {
+    outline: none;
+  }
+
+  &.d-focus {
+    & > [slot="label"] {
+      font-weight: 600;
     }
-  
-    &.d-focus {
-      & > [slot="label"] {
-        font-weight: 600;
-      }
-  
-      & > [slot="visual"] {
-        fill: var(--d-field-choice-off-focus-fill);
-      }
-  
-      &[checked] > [slot="visual"] {
-        fill: var(--d-field-choice-on-focus-fill);
-      }
+
+    & > [slot="visual"] {
+      fill: var(--d-field-choice-off-focus-fill);
     }
+
+    &[checked] > [slot="visual"] {
+      fill: var(--d-field-choice-on-focus-fill);
+    }
+  }
 
 }
-

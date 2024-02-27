@@ -1,8 +1,7 @@
-import { BaseHTMLElement, OnEvent, all, customElement, elem, frag, getAttr, html, on, onDoc, onEvent, onWin, setAttr, trigger } from 'dom-native';
+import { BaseHTMLElement, OnEvent, all, customElement, elem, frag, getAttr, html, on, onDoc, onEvent, onWin, position, setAttr, style, trigger } from 'dom-native';
 import { BaseFieldElement } from './d-base-field.js';
 import { BaseInputElement } from './d-base-input.js';
 import { svgSymbolEl } from './d-ico-symbol.js';
-import { position } from './position.js';
 
 const SHADOW_CONTENT = html`
 	<slot name="icon-lead"></slot>
@@ -253,9 +252,26 @@ class SelectPopupElement extends BaseHTMLElement {
 	reposition() {
 		const parentRect = this.selectEl.getBoundingClientRect();
 		if (parentRect != null && !isSameRect(parentRect, this.previousSelectElRect)) {
-			position(this, { ref: this.selectEl, to: SELECT_POPUP_POSITION, width: true });
+			const hGap = 4;
+			let width = this.selectEl.clientWidth - hGap * 2;
+			style(this, { width: `${width + 1}px` });
+			console.log('->> ', this.selectEl.clientWidth);
+			position(this, this.selectEl, {
+				pos: "BL",
+				vGap: 8,
+				hGap
+			});
+			// NOTE: This is a hack otherwise when the window has small height
+			//       the popup sometime goes below the d-textara text content. 
+			//       Really seems to be a UI bug, and only way found so far is to change
+			//       a ui property on this popup (hence the +1 above, and the value here)
+			setTimeout(() => {
+				style(this, { width: `${width}px` });
+			}, 10);
+
 		}
 		this.previousSelectElRect = parentRect;
+
 	}
 
 
