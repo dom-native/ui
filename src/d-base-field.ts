@@ -2,11 +2,9 @@
 // Making sure the ts helper for decorator is set
 import { BaseHTMLElement, className, getAttr, on, puller, pusher, setAttr, trigger } from 'dom-native';
 
-// NOTE: For now, let's try to not do the tslib. 
-// import { __decorate } from 'tslib';
-// if ((<any>window).__decorate == null) {
-// 	(<any>window).__decorate = __decorate;
-// }
+export const DX_OPTIONS_NAMES = {
+	PULL_SKIP_UNCHECKED: "pull_skip_unchecked"
+}
 
 
 /**
@@ -79,6 +77,18 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 	get iconLead() { return getAttr(this, 'icon-lead') }
 
 	get iconTrail() { return getAttr(this, 'icon-trail') }
+
+	// Note: Making the return object type a little bit more flexible, as might be more data later.
+	get dxOptions(): null | { [key: string]: any } {
+		let [dx, dataDx] = getAttr(this, 'dx', 'data-dx');
+		let dxStr = dx || dataDx;
+		if (!dxStr) return null;
+		let obj = dxStr.split(',').reduce((acc: any, item) => {
+			acc[item] = true;
+			return acc;
+		}, {});
+		return obj;
+	}
 
 	//// Properties (CSS Reflective)
 	get noValue() { return this.classList.contains('no-value') }

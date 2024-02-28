@@ -1,5 +1,5 @@
 import { elem, first, getAttr, html, on, setAttr } from 'dom-native';
-import { BaseFieldElement } from './d-base-field.js';
+import { BaseFieldElement, DX_OPTIONS_NAMES } from './d-base-field.js';
 
 
 const SHADOW_CONTENT = html`
@@ -48,19 +48,28 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 	abstract handleClick(): void;
 
 	//// Property (Value)
-	get value(): boolean | string {
+	get value(): boolean | string | undefined {
 		const attrValue = getAttr(this, 'value') as string | null;
 		const checked = this.checked;
-		// if we have a attribute value return it 
-		if (attrValue) {
-			// Note: here, we could return null, but return false make the getter/setter symetrical 
-			//       as accepting null in the setter might not be the right choice.
-			return (checked) ? attrValue : false;
-		} else {
-			return checked;
+
+		if (checked) {
+			return attrValue || true
+		}
+		// if not checked
+		else {
+			let dxOptions = this.dxOptions;
+			let skipUnchecked = dxOptions?.[DX_OPTIONS_NAMES.PULL_SKIP_UNCHECKED] ?? false;
+			if (skipUnchecked) {
+				return undefined;
+			} else {
+				return false;
+			}
 		}
 	}
-	set value(v: boolean | string) {
+	set value(v: boolean | string | undefined) {
+		if (v === undefined) {
+			return;
+		}
 		// if it is a boolean, then, just pass the value
 		if (typeof v === 'boolean') {
 			this.checked = v;
