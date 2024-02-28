@@ -57,6 +57,11 @@ export abstract class BaseToggleElement extends BaseFieldElement {
 		}
 		// if not checked
 		else {
+			// Check if we have a unchecked-value 
+			let uncheckedValue = getAttr(this, "unchecked-value");
+			if (uncheckedValue) return uncheckedValue;
+
+			// Otherwise check the dxOptions to decide if return false or undefined
 			let dxOptions = this.dxOptions;
 			let skipUnchecked = dxOptions?.[DX_OPTIONS_NAMES.PULL_SKIP_UNCHECKED] ?? false;
 			if (skipUnchecked) {

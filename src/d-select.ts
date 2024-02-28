@@ -255,7 +255,6 @@ class SelectPopupElement extends BaseHTMLElement {
 			const hGap = 4;
 			let width = this.selectEl.clientWidth - hGap * 2;
 			style(this, { width: `${width + 1}px` });
-			console.log('->> ', this.selectEl.clientWidth);
 			position(this, this.selectEl, {
 				pos: "BL",
 				vGap: 8,
@@ -267,7 +266,7 @@ class SelectPopupElement extends BaseHTMLElement {
 			//       a ui property on this popup (hence the +1 above, and the value here)
 			setTimeout(() => {
 				style(this, { width: `${width}px` });
-			}, 10);
+			}, 20);
 
 		}
 		this.previousSelectElRect = parentRect;
