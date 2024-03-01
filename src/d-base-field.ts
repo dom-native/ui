@@ -19,6 +19,7 @@ export const DX_OPTIONS_NAMES = {
  *   - `label?`: if absent, this css `.no-label` will be set.
  *   - `value?`: this is the initial value of the component. TODO: needs to unify when no value (right now .empty for input, .no-value for c-select)
  *   - `placeholder?`: placeholder text.
+ *   - `autofocus?`: will do a focus on requestAnimationFrame (later might add timeout when attribute has numeric value)
  * 
  * Properties: 
  *   - `readonly: boolean`: reflective of attribute.
@@ -134,6 +135,14 @@ export abstract class BaseFieldElement extends BaseHTMLElement {
 		requestAnimationFrame(() => {
 			this._eventReady = true;
 		});
+
+		let autofocus = getAttr(this, "autofocus");
+		if (autofocus != null) {
+			requestAnimationFrame(() => {
+				this.focus();
+			});
+		}
+
 	}
 
 
