@@ -1,7 +1,7 @@
 {
   "name": "@dom-native/ui",
   "type": "module",
-  "version": "0.4.0-alpha.1",
+  "version": "0.3.0-alpha.2",
   "description": "Minimalist, stylable, and extensible DOM UI base components based dom-native",
   "main": "src/index.ts",
   "typings": "src/index.ts",
@@ -17,7 +17,7 @@
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "dom-native": "file:../dom-native_src"
+    "dom-native": "0.11.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
@@ -25,18 +25,18 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash.debounce": "^4.0.9",
-    "chokidar": "^3.5.3",
+    "chokidar": "^3.6.0",
     "cmdrouter": "^0.3.1",
-    "execa": "^8.0.1",
+    "execa": "^9.0.0",
     "fs-aux": "^0.1.1",
     "js-yaml": "^4.1.0",
     "lodash.debounce": "^4.0.8",
     "pcss-cli": "^0.2.9",
-    "rollup": "^4.9.4",
+    "rollup": "^4.17.2",
     "rollup-plugin-typescript2": "^0.36.0",
-    "sketchdev": "^0.7.4",
+    "sketchdev": "^0.7.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   },
   "files": [
     "src/",
